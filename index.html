@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+<title>Andre & Mary · New York 2026</title>
+<meta name="description" content="Andre & Mary — Itinerario New York 21–30 agosto 2026">
+<meta name="theme-color" content="#F1F1F3">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="NY 2026">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="icon" href="icon-192.png">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<style>
+:root{
+  --bg:#F1F1F3; --card:#FFFFFF; --soft:#F5F5F7; --line:#EAEAEE;
+  --txt:#111318; --muted:#8A8F98; --dim:#C3C6CD;
+  --m:#F5A623; --p:#5B8DEF; --s:#8B7CF6;
+  --ok:#34C759; --amber:#F5A623;
+  --sh:0 1px 2px rgba(16,24,40,.04), 0 10px 28px -14px rgba(16,24,40,.14);
+  --sat:env(safe-area-inset-top,0px); --sab:env(safe-area-inset-bottom,0px);
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{height:100%}
+body{
+  background:var(--bg); color:var(--txt);
+  font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text','Segoe UI',Roboto,sans-serif;
+  overscroll-behavior-y:none;
+}
+#app{display:flex;flex-direction:column;height:100dvh}
+svg{display:block}
+
+/* ---------- header ---------- */
+header{padding:calc(var(--sat) + 14px) 18px 0 18px;flex:none;background:var(--bg)}
+.h-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:14px}
+.h-top .who{font-size:14px;font-weight:600;color:var(--muted);letter-spacing:-.1px}
+.h-top h1{font-size:26px;font-weight:800;letter-spacing:-.6px;margin-top:2px}
+.clockpill{display:flex;align-items:center;gap:6px;background:var(--card);border-radius:99px;
+  padding:8px 13px;box-shadow:var(--sh);font-size:12.5px;font-weight:600;color:var(--txt);
+  font-variant-numeric:tabular-nums;margin-top:4px}
+.clockpill svg{width:14px;height:14px;color:var(--muted)}
+.daystrip{display:flex;gap:8px;overflow-x:auto;padding:2px 2px 14px;scrollbar-width:none}
+.daystrip::-webkit-scrollbar{display:none}
+.chip{flex:none;width:54px;padding:9px 0 8px;border-radius:18px;text-align:center;
+  background:var(--card);box-shadow:var(--sh);color:var(--muted);cursor:pointer;transition:all .15s}
+.chip .dw{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.6px}
+.chip .dn{font-size:18px;font-weight:800;color:var(--txt);margin-top:2px}
+.chip.sel{background:var(--txt)}
+.chip.sel .dw{color:#9aa0ab}
+.chip.sel .dn{color:#fff}
+.chip.past:not(.sel){opacity:.45}
+.chip .dot{width:5px;height:5px;border-radius:3px;background:var(--amber);margin:4px auto 0;visibility:hidden}
+.chip.today .dot{visibility:visible}
+
+/* ---------- main ---------- */
+main{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:14px 18px calc(var(--sab) + 96px)}
+.banner{display:flex;align-items:center;gap:9px;background:var(--card);border-radius:18px;
+  padding:12px 15px;margin-bottom:14px;font-size:13px;color:var(--muted);box-shadow:var(--sh)}
+.banner b{color:var(--txt);font-weight:700}
+.banner .pulse{width:8px;height:8px;border-radius:4px;background:var(--ok);flex:none;animation:pu 1.6s infinite}
+@keyframes pu{0%,100%{opacity:1}50%{opacity:.25}}
+.banner svg{width:16px;height:16px;color:var(--muted);flex:none}
+
+.dayhead{margin:2px 2px 14px}
+.dayhead h2{font-size:22px;font-weight:800;letter-spacing:-.5px}
+.dayhead .area{font-size:13px;color:var(--muted);margin-top:3px;line-height:1.4}
+.meta{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.meta span{display:flex;align-items:center;gap:6px;font-size:11.5px;font-weight:600;
+  background:var(--card);box-shadow:var(--sh);border-radius:99px;padding:6px 11px;color:var(--muted)}
+.meta svg{width:13px;height:13px}
+
+/* ---------- period ---------- */
+.period{margin-bottom:18px;transition:opacity .2s}
+.period.done-p{opacity:.5}
+.p-head{display:flex;align-items:center;gap:8px;padding:0 4px 9px}
+.p-head .pdot{width:8px;height:8px;border-radius:4px}
+.p-head .nm{font-size:11.5px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:var(--muted)}
+.p-head .live-tag{margin-left:auto;font-size:10px;font-weight:700;letter-spacing:.8px;
+  color:#fff;background:var(--txt);border-radius:99px;padding:4px 10px}
+.acts{display:flex;flex-direction:column;gap:8px}
+.act{display:flex;align-items:center;gap:12px;background:var(--card);border-radius:18px;
+  padding:11px 12px;box-shadow:var(--sh)}
+.act:active{transform:scale(.985)}
+.ck{flex:none;width:34px;height:34px;border-radius:17px;border:1.5px solid var(--dim);
+  display:grid;place-items:center;color:transparent;transition:all .15s;cursor:pointer;background:var(--card)}
+.ck svg{width:16px;height:16px}
+.act.done .ck{background:var(--txt);border-color:var(--txt);color:#fff}
+.act .body{flex:1;min-width:0;cursor:pointer}
+.act .t{font-size:14.5px;font-weight:650;letter-spacing:-.1px;line-height:1.3}
+.act.done .t{color:var(--dim);text-decoration:line-through}
+.act .sub{display:flex;gap:5px;flex-wrap:wrap;margin-top:4px;align-items:center}
+.act .sub span{display:flex;align-items:center;gap:4px;font-size:11px;font-weight:600;
+  color:var(--muted);background:var(--soft);border-radius:7px;padding:3px 7px}
+.act .sub svg{width:11px;height:11px}
+.act .sub .tick{color:var(--ok)}
+.act .sub .next{color:#fff;background:var(--amber)}
+.act .go{flex:none;width:38px;height:38px;border-radius:19px;background:var(--soft);
+  display:grid;place-items:center;text-decoration:none;color:var(--txt)}
+.act .go svg{width:16px;height:16px}
+.act .go:active{background:var(--line)}
+
+/* ---------- map ---------- */
+#view-map{display:none;flex-direction:column;flex:1;min-height:0}
+#map{flex:1;background:#e9eaee}
+.map-legend{flex:none;display:flex;gap:16px;justify-content:center;padding:10px 0;
+  background:var(--card);border-top:1px solid var(--line);font-size:11.5px;font-weight:600;color:var(--muted)}
+.map-legend i{display:inline-block;width:8px;height:8px;border-radius:4px;margin-right:5px}
+.leaflet-popup-content-wrapper{background:var(--card);color:var(--txt);border-radius:14px;box-shadow:var(--sh)}
+.leaflet-popup-tip{background:var(--card)}
+.leaflet-popup-content{margin:11px 14px;font-family:inherit}
+.pop-t{font-weight:700;font-size:13.5px;margin-bottom:6px}
+.pop-a{display:inline-flex;align-items:center;gap:5px;font-size:12px;color:var(--p);text-decoration:none;font-weight:700}
+.pop-a svg{width:12px;height:12px}
+.numpin{background:none;border:none}
+.numpin div{width:26px;height:26px;border-radius:13px;display:grid;place-items:center;
+  color:#fff;font-weight:800;font-size:12px;border:2px solid #fff;box-shadow:0 2px 8px rgba(16,24,40,.3)}
+.numpin div svg{width:13px;height:13px}
+
+/* ---------- info ---------- */
+.info-card{background:var(--card);border-radius:20px;padding:16px 17px;margin-bottom:12px;box-shadow:var(--sh)}
+.info-card h3{display:flex;align-items:center;gap:8px;font-size:11.5px;font-weight:700;
+  text-transform:uppercase;letter-spacing:1.2px;color:var(--muted);margin-bottom:12px}
+.info-card h3 svg{width:15px;height:15px}
+.info-card .big{font-size:16.5px;font-weight:750;letter-spacing:-.2px}
+.info-card p{font-size:13.5px;color:var(--muted);line-height:1.5;margin-top:4px}
+.info-card a.lnk{display:inline-flex;align-items:center;gap:6px;color:var(--p);
+  text-decoration:none;font-weight:700;font-size:13.5px;margin-top:8px}
+.info-card a.lnk svg{width:13px;height:13px}
+.trow{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--line);font-size:13.5px}
+.trow:last-child{border-bottom:none;padding-bottom:0}
+.trow .l{color:var(--muted);font-weight:600} .trow .r{font-weight:650;font-variant-numeric:tabular-nums}
+.tk{display:flex;align-items:center;gap:12px;padding:9px 0;border-bottom:1px solid var(--line)}
+.tk:last-child{border-bottom:none;padding-bottom:0}
+.tk .em{flex:none;width:36px;height:36px;border-radius:18px;background:var(--soft);display:grid;place-items:center}
+.tk .em svg{width:17px;height:17px;color:var(--txt)}
+.tk .tt{font-size:14px;font-weight:650}
+.tk small{display:block;color:var(--muted);font-size:12px;font-weight:500;margin-top:1px}
+.pbar{height:8px;border-radius:4px;background:var(--soft);overflow:hidden;margin-top:10px}
+.pbar i{display:block;height:100%;border-radius:4px;background:var(--txt);transition:width .3s}
+
+/* ---------- tabbar ---------- */
+nav{position:fixed;left:18px;right:18px;bottom:calc(var(--sab) + 12px);z-index:1000;
+  display:flex;background:rgba(255,255,255,.94);backdrop-filter:blur(16px);
+  -webkit-backdrop-filter:blur(16px);border-radius:26px;box-shadow:0 4px 30px -6px rgba(16,24,40,.22);
+  padding:8px}
+nav button{flex:1;background:none;border:none;color:var(--muted);font-family:inherit;
+  font-size:10.5px;font-weight:650;display:flex;flex-direction:column;align-items:center;
+  gap:4px;padding:7px 0;cursor:pointer;border-radius:18px}
+nav button svg{width:21px;height:21px}
+nav button.sel{color:var(--txt);background:var(--soft)}
+#view-info{display:none}
+.hidden{display:none!important}
+</style>
+</head>
+<body>
+<div id="app">
+  <header>
+    <div class="h-top">
+      <div>
+        <div class="who">Andre &amp; Mary</div>
+        <h1>New York 2026</h1>
+      </div>
+      <div class="clockpill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><span id="h-clock">--:--</span></div>
+    </div>
+    <div class="daystrip" id="daystrip"></div>
+  </header>
+
+  <main id="main">
+    <div id="view-day"></div>
+
+    <div id="view-info">
+      <div class="info-card">
+        <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-8 9 8"/><path d="M5 9.5V21h14V9.5"/><path d="M9 21v-6h6v6"/></svg>Hotel</h3>
+        <div class="big">NH Madison Hotel</div>
+        <p>Midtown, Manhattan · 2 adulti · 21 → 30 agosto</p>
+        <a class="lnk" id="hotel-maps" target="_blank" rel="noopener">Apri in Google Maps <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg></a>
+      </div>
+      <div class="info-card">
+        <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.5 13.5L3 11l1.5-1.5L10 10l5-6 2 .5-3 6.5 5 1.5L21 11l-1 2-6-1-2.5 5H10l1.5-4z" transform="rotate(15 12 12)"/></svg>Voli</h3>
+        <div class="trow"><span class="l">Arrivo JFK</span><span class="r">Ven 21 Ago · 17:00</span></div>
+        <div class="trow"><span class="l">Partenza JFK</span><span class="r">Dom 30 Ago · 22:00</span></div>
+        <div class="trow"><span class="l">Uscita per JFK</span><span class="r">Dom 30 Ago · entro 18:00</span></div>
+      </div>
+      <div class="info-card">
+        <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9V7a2 2 0 012-2h14a2 2 0 012 2v2a3 3 0 000 6v2a2 2 0 01-2 2H5a2 2 0 01-2-2v-2a3 3 0 000-6z"/><path d="M13 5v2M13 11v2M13 17v2"/></svg>Biglietti già acquistati</h3>
+        <div class="tk"><span class="em"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 3v10"/><path d="M8 21h8M12 17v4"/><rect x="8" y="3" width="8" height="7" rx="4"/></svg></span><div><div class="tt">Bruno Mars — MetLife Stadium</div><small>Mar 25 Ago · ore 19:00</small></div></div>
+        <div class="tk"><span class="em"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 21c0-4 3-7 8-7s8 3 8 7"/><path d="M12 3l1.2 2.6L16 6l-2 2 .5 3L12 9.6 9.5 11l.5-3-2-2 2.8-.4z"/></svg></span><div><div class="tt">Ferry Liberty + Ellis Island</div><small>Gio 27 Ago · ore 09:00</small></div></div>
+        <div class="tk"><span class="em"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M7 5c2 2.5 2 11.5 0 14M17 5c-2 2.5-2 11.5 0 14"/></svg></span><div><div class="tt">Yankees vs Red Sox — Yankee Stadium</div><small>Ven 28 Ago · ore 19:00</small></div></div>
+      </div>
+      <div class="info-card">
+        <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 18a5 5 0 00-10 0"/><path d="M12 9V3M4.2 10.2l1.4 1.4M1 18h2M21 18h2M18.4 11.6l1.4-1.4"/><path d="M3 22h18"/></svg>Golden hour &amp; tramonto</h3>
+        <div id="sun-table"></div>
+      </div>
+      <div class="info-card">
+        <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Avanzamento viaggio</h3>
+        <p id="progress-txt">—</p>
+        <div class="pbar"><i id="progress-bar" style="width:0%"></i></div>
+      </div>
+    </div>
+  </main>
+
+  <div id="view-map">
+    <div id="map"></div>
+    <div class="map-legend">
+      <span><i style="background:var(--m)"></i>Mattina</span>
+      <span><i style="background:var(--p)"></i>Pomeriggio</span>
+      <span><i style="background:var(--s)"></i>Sera</span>
+    </div>
+  </div>
+
+  <nav>
+    <button id="tab-day" class="sel" onclick="setTab('day')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M8 3v4M16 3v4M3 10h18"/></svg>Giorno</button>
+    <button id="tab-map" onclick="setTab('map')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 4L3 6v14l6-2 6 2 6-2V4l-6 2-6-2z"/><path d="M9 4v14M15 6v14"/></svg>Mappa</button>
+    <button id="tab-info" onclick="setTab('info')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v5"/><path d="M12 8h.01"/></svg>Info</button>
+  </nav>
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+/* ================= ICONS (flat, stroke) ================= */
+const I={
+check:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>',
+nav:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l18-8-8 18-2-8-8-2z"/></svg>',
+clock:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>',
+ticket:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9V7a2 2 0 012-2h14a2 2 0 012 2v2a3 3 0 000 6v2a2 2 0 01-2 2H5a2 2 0 01-2-2v-2a3 3 0 000-6z"/></svg>',
+note:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v5"/><path d="M12 8h.01"/></svg>',
+walk:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="13" cy="4.5" r="1.8"/><path d="M12.5 8.5L10 12l1.5 3.5L10 21"/><path d="M12.5 8.5l3 2 2.5.5M12.5 8.5L9.5 8 7 10.5"/><path d="M11.5 15.5L14 17l1 4"/></svg>',
+train:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="3" width="12" height="13" rx="3"/><path d="M6 10h12"/><path d="M9.5 13h.01M14.5 13h.01"/><path d="M8.5 16L6 21M15.5 16L18 21"/></svg>',
+gold:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 16a5 5 0 00-10 0"/><path d="M12 8V4M4.9 9.9l1.4 1.4M2 16h2M20 16h2M17.7 11.3l1.4-1.4M3 20h18"/></svg>',
+sunset:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 17a5 5 0 00-10 0"/><path d="M12 3v6m0 0l-2.5-2.5M12 9l2.5-2.5"/><path d="M3 21h18"/></svg>',
+hotel:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-8 9 8"/><path d="M5 9.5V21h14V9.5"/><path d="M9 21v-6h6v6"/></svg>',
+cal:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M8 3v4M16 3v4M3 10h18"/></svg>'
+};
+
+/* ================= DATA ================= */
+const HOTEL={name:"NH Madison Hotel",lat:40.7497,lng:-73.9827};
+const A=(name,lat,lng,o={})=>({name,lat,lng,...o});
+const DAYS=[
+{id:"2026-08-21",dow:"Ven",date:"21 Ago",title:"Venerdì 21",area:"Midtown · Arrivo",golden:null,sunset:null,walk:false,
+ m:[],
+ p:[A("Arrivo a JFK",40.6413,-73.7781,{time:"17:00",note:"dogana all'arrivo"}),
+    A("Trasferimento in hotel",HOTEL.lat,HOTEL.lng,{time:"~19:00–20:00",q:"NH Madison Hotel New York"})],
+ s:[A("Cena — Bubba Gump Shrimp Co.",40.7566,-73.9863,{q:"Bubba Gump Shrimp Co Times Square"}),
+    A("Times Square",40.7580,-73.9855)]},
+{id:"2026-08-22",dow:"Sab",date:"22 Ago",title:"Sabato 22",area:"Midtown",golden:"18:38",sunset:"19:38",walk:true,
+ m:[A("5ª Avenue",40.7539,-73.9810,{q:"5th Avenue and 42nd St New York"}),
+    A("New York Public Library",40.7531,-73.9822,{note:"apre 10:00"}),
+    A("Bryant Park",40.7536,-73.9832)],
+ p:[A("Grand Central Terminal",40.7527,-73.9772),
+    A("Summit One Vanderbilt",40.7527,-73.9787),
+    A("St. Patrick's Cathedral",40.7585,-73.9760),
+    A("Lego Store — Rockefeller Center",40.7587,-73.9787),
+    A("Top of the Rock",40.7591,-73.9794)],
+ s:[A("Keens Steakhouse",40.7505,-73.9862,{time:"19:00/19:30"})]},
+{id:"2026-08-23",dow:"Dom",date:"23 Ago",title:"Domenica 23",area:"Upper East Side → Midtown (sera)",golden:"18:36",sunset:"19:36",walk:true,
+ m:[A("Central Park",40.7690,-73.9760)],
+ p:[A("Guggenheim (foto esterna)",40.7830,-73.9590,{q:"Solomon R. Guggenheim Museum"}),
+    A("The Met",40.7794,-73.9632,{note:"apre 10:00",q:"The Metropolitan Museum of Art"})],
+ s:[A("Musical a Broadway",40.7590,-73.9845,{time:"19:00/19:30",note:"spettacolo TBD",q:"Broadway Theater District New York"}),
+    A("Mermaid Oyster Bar",40.7562,-73.9846,{note:"post-spettacolo",q:"Mermaid Oyster Bar Times Square"})]},
+{id:"2026-08-24",dow:"Lun",date:"24 Ago",title:"Lunedì 24",area:"Brooklyn",golden:"18:35",sunset:"19:35",walk:false,
+ m:[A("DUMBO",40.7033,-73.9881,{q:"DUMBO Brooklyn"}),
+    A("Brooklyn Bridge Park",40.7002,-73.9967),
+    A("Squibb Park Bridge",40.7008,-73.9967),
+    A("Brooklyn Heights Promenade",40.6968,-73.9973)],
+ p:[A("Brooklyn Bridge (passeggiata)",40.7061,-73.9969,{q:"Brooklyn Bridge pedestrian entrance"}),
+    A("Coney Island",40.5749,-73.9850),
+    A("Nathan's Famous",40.5754,-73.9814,{q:"Nathan's Famous Coney Island"})],
+ s:[A("Serata libera",HOTEL.lat,HOTEL.lng,{free:true})]},
+{id:"2026-08-25",dow:"Mar",date:"25 Ago",title:"Martedì 25",area:"Lower Manhattan → Meatpacking → New Jersey (sera)",golden:"18:33",sunset:"19:33",walk:false,
+ m:[A("9/11 Memorial & Museum",40.7115,-74.0134,{note:"apre 09:00"}),
+    A("One World Observatory",40.7130,-74.0131),
+    A("The Oculus",40.7116,-74.0110,{q:"Oculus World Trade Center"})],
+ p:[A("Whitney Museum of American Art",40.7396,-74.0089)],
+ s:[A("Bruno Mars — MetLife Stadium",40.8135,-74.0745,{time:"19:00",ticket:true})]},
+{id:"2026-08-26",dow:"Mer",date:"26 Ago",title:"Mercoledì 26",area:"Midtown → UWS / Hell's Kitchen → Hudson → Weehawken (sera)",golden:"18:32",sunset:"19:32",walk:false,
+ m:[A("MoMA",40.7614,-73.9776,{note:"apre 10:30",q:"Museum of Modern Art New York"})],
+ p:[A("Lincoln Center",40.7725,-73.9835),
+    A("USS Intrepid — Pier 86",40.7645,-73.9995,{q:"Intrepid Museum New York"}),
+    A("NYC Ferry: Pier 79 → Pier 11",40.7601,-74.0027,{note:"skyline nord→sud",q:"NYC Ferry Midtown West Pier 79"})],
+ s:[A("NY Waterway → Weehawken",40.7013,-74.0132,{note:"da Brookfield Place / Pier 11",q:"NY Waterway Terminal Brookfield Place"}),
+    A("Hamilton Park (vista skyline)",40.7680,-74.0177,{q:"Hamilton Park Weehawken"}),
+    A("Blu On The Hudson",40.7737,-74.0122,{q:"Blu on the Hudson Weehawken"})]},
+{id:"2026-08-27",dow:"Gio",date:"27 Ago",title:"Giovedì 27",area:"Lower Manhattan → Midtown East (sera)",golden:"18:30",sunset:"19:30",walk:false,
+ m:[A("Ferry da Battery Park",40.7013,-74.0158,{time:"09:00",ticket:true,q:"Statue City Cruises Battery Park"}),
+    A("Liberty Island",40.6892,-74.0445,{q:"Statue of Liberty"}),
+    A("Ellis Island",40.6995,-74.0396)],
+ p:[A("Wall Street",40.7069,-74.0113),
+    A("Charging Bull",40.7056,-74.0134),
+    A("NY Supreme Court — Foley Square",40.7143,-74.0018,{q:"New York County Supreme Court"}),
+    A("Chrysler Building",40.7516,-73.9755),
+    A("Chinatown",40.7158,-73.9970,{q:"Chinatown Manhattan"})],
+ s:[A("Grand Central Oyster Bar",40.7527,-73.9772,{time:"19:00",note:"chiude 21:30"})]},
+{id:"2026-08-28",dow:"Ven",date:"28 Ago",title:"Venerdì 28",area:"Lower Manhattan → LES → Gramercy → Midtown → Bronx (sera)",golden:"18:29",sunset:"19:29",walk:false,
+ m:[A("Governors Island",40.6895,-74.0168),
+    A("Katz's Delicatessen (pranzo)",40.7223,-73.9874,{q:"Katz's Delicatessen"})],
+ p:[A("Gramercy Park",40.7379,-73.9860),
+    A("Flatiron Building",40.7411,-73.9897),
+    A("Empire State Building",40.7484,-73.9857),
+    A("UN Headquarters",40.7489,-73.9680,{q:"United Nations Headquarters"}),
+    A("Roosevelt Island Tramway",40.7614,-73.9642)],
+ s:[A("Yankees vs Red Sox — Yankee Stadium",40.8296,-73.9262,{time:"19:00",ticket:true})]},
+{id:"2026-08-29",dow:"Sab",date:"29 Ago",title:"Sabato 29",area:"Chelsea / Hudson Yards → Greenwich Village (sera)",golden:"18:27",sunset:"19:27",walk:true,
+ m:[A("Edge Observatory",40.7538,-74.0011,{note:"apre 08:00",q:"Edge Hudson Yards"}),
+    A("Vessel",40.7540,-74.0022,{note:"apre 11:00",q:"Vessel Hudson Yards"})],
+ p:[A("High Line",40.7480,-74.0048,{q:"The High Line"}),
+    A("Little Island",40.7420,-74.0100),
+    A("Pier 57 Rooftop Park",40.7425,-74.0084)],
+ s:[A("Chelsea Market (cena)",40.7424,-74.0060),
+    A("SoHo",40.7233,-74.0030,{q:"SoHo New York"}),
+    A("Washington Square Arch",40.7314,-73.9971),
+    A("Blue Note Jazz Club",40.7309,-74.0006,{time:"22:30"})]},
+{id:"2026-08-30",dow:"Dom",date:"30 Ago",title:"Domenica 30",area:"Harlem · Partenza",golden:null,sunset:null,walk:false,
+ m:[A("Gospel — Abyssinian Baptist Church",40.8168,-73.9407,{time:"fila 10:00 · inizio 11:00"}),
+    A("Soul food brunch — Sylvia's",40.8089,-73.9442,{q:"Sylvia's Restaurant Harlem"}),
+    A("Apollo Theater",40.8100,-73.9498)],
+ p:[A("Rientro in hotel + checkout",HOTEL.lat,HOTEL.lng,{note:"uscita per JFK entro 18:00",q:"NH Madison Hotel New York"})],
+ s:[A("Partenza per JFK — volo 22:00",40.6413,-73.7781,{q:"JFK Airport"})]}
+];
+const PERIODS=[["m","Mattina"],["p","Pomeriggio"],["s","Sera"]];
+const PCOL={m:"#F5A623",p:"#5B8DEF",s:"#8B7CF6"};
+
+/* ================= STATE ================= */
+let sel=null, tab="day", map=null, mapLayer=null;
+let checks={}; try{checks=JSON.parse(localStorage.getItem("nyc-checks")||"{}")}catch(e){}
+const saveChecks=()=>localStorage.setItem("nyc-checks",JSON.stringify(checks));
+
+/* ================= TIME (NYC) ================= */
+const fmtNY=new Intl.DateTimeFormat("en-CA",{timeZone:"America/New_York",year:"numeric",month:"2-digit",day:"2-digit",hour:"2-digit",minute:"2-digit",hour12:false});
+function ny(){
+  const p={}; fmtNY.formatToParts(new Date()).forEach(x=>p[x.type]=x.value);
+  return {date:`${p.year}-${p.month}-${p.day}`,h:+p.hour,min:p.minute,hm:`${p.hour}:${p.minute}`};
+}
+const periodOf=h=>h<13?"m":(h<18?"p":"s");
+function dayState(id){const n=ny();return id<n.date?"past":(id>n.date?"future":"today");}
+
+/* ================= HELPERS ================= */
+const gmap=a=>"https://www.google.com/maps/search/?api=1&query="+encodeURIComponent(a.q||a.name+" New York");
+const gnav=a=>"https://www.google.com/maps/dir/?api=1&destination="+encodeURIComponent(a.q||a.name+" New York")+"&travelmode=transit";
+const key=(d,p,i)=>`${d}|${p}|${i}`;
+const esc=s=>s.replace(/&/g,"&amp;").replace(/</g,"&lt;");
+
+function findNext(day){
+  const st=dayState(day.id);
+  if(st==="past")return null;
+  const n=ny(), cur=st==="today"?periodOf(n.h):null;
+  const order=["m","p","s"];
+  for(const p of order){
+    if(st==="today" && order.indexOf(p)<order.indexOf(cur))continue;
+    const list=day[p];
+    for(let i=0;i<list.length;i++){
+      if(!checks[key(day.id,p,i)] && !list[i].free)return p+i;
+    }
+  }
+  return null;
+}
+
+/* ================= RENDER: day strip ================= */
+function renderStrip(){
+  const el=document.getElementById("daystrip");
+  el.innerHTML=DAYS.map(d=>{
+    const st=dayState(d.id);
+    return `<div class="chip ${st==="past"?"past":""} ${st==="today"?"today":""} ${sel===d.id?"sel":""}" onclick="selectDay('${d.id}')">
+      <div class="dw">${d.dow}</div><div class="dn">${d.date.split(" ")[0]}</div><div class="dot"></div></div>`;
+  }).join("");
+}
+
+/* ================= RENDER: day view ================= */
+function renderDay(){
+  const day=DAYS.find(d=>d.id===sel); if(!day)return;
+  const st=dayState(day.id), n=ny();
+  const curP=st==="today"?periodOf(n.h):null;
+  const nextK=findNext(day);
+  let html="";
+
+  if(st==="today"){
+    const pn={m:"mattina",p:"pomeriggio",s:"sera"}[curP];
+    html+=`<div class="banner"><span class="pulse"></span><span>Oggi · <b>${pn}</b> · ore <b>${n.hm}</b> a New York</span></div>`;
+  }else if(st==="future"){
+    const dd=Math.round((new Date(day.id)-new Date(n.date))/864e5);
+    html+=`<div class="banner">${I.cal}<span>${dd===1?"<b>È domani</b>":`Tra <b>${dd} giorni</b>`}</span></div>`;
+  }else{
+    html+=`<div class="banner">${I.check}<span>Giornata conclusa</span></div>`;
+  }
+
+  html+=`<div class="dayhead"><h2>${day.title} agosto</h2><div class="area">${esc(day.area)}</div>
+    <div class="meta">
+    <span>${day.walk?I.walk:I.train}${day.walk?"A piedi":"Metro / mezzi"}</span>
+    ${day.golden?`<span>${I.gold}Golden ${day.golden}</span><span>${I.sunset}Tramonto ${day.sunset}</span>`:""}
+    </div></div>`;
+
+  for(const[p,label]of PERIODS){
+    const list=day[p]; if(!list.length)continue;
+    const allDone=list.every((a,i)=>checks[key(day.id,p,i)]||a.free);
+    const isLive=st==="today"&&curP===p;
+    const pastP=st==="past"||(st==="today"&&["m","p","s"].indexOf(p)<["m","p","s"].indexOf(curP));
+    html+=`<div class="period ${(pastP&&!isLive)||allDone?"done-p":""}">
+      <div class="p-head"><span class="pdot" style="background:${PCOL[p]}"></span><span class="nm">${label}</span>
+      ${isLive?'<span class="live-tag">In corso</span>':""}</div><div class="acts">`;
+    list.forEach((a,i)=>{
+      const k=key(day.id,p,i), done=!!checks[k];
+      const isNext=nextK===p+i;
+      html+=`<div class="act ${done?"done":""}">
+        <div class="ck" onclick="toggle('${k}')">${I.check}</div>
+        <div class="body" onclick="toggle('${k}')">
+          <div class="t">${esc(a.name)}</div>
+          ${(isNext&&!done)||a.time||a.note||a.ticket?`<div class="sub">
+            ${isNext&&!done?'<span class="next">Prossima</span>':""}
+            ${a.time?`<span>${I.clock}${a.time}</span>`:""}
+            ${a.note?`<span>${esc(a.note)}</span>`:""}
+            ${a.ticket?`<span class="tick">${I.ticket}Biglietti ok</span>`:""}
+          </div>`:""}
+        </div>
+        ${a.free?"":`<a class="go" href="${gnav(a)}" target="_blank" rel="noopener" onclick="event.stopPropagation()">${I.nav}</a>`}
+      </div>`;
+    });
+    html+=`</div></div>`;
+  }
+  document.getElementById("view-day").innerHTML=html;
+}
+
+window.toggle=k=>{checks[k]?delete checks[k]:checks[k]=1;saveChecks();renderDay();renderInfo();};
+window.selectDay=id=>{sel=id;renderStrip();renderDay();if(tab==="map")renderMap();};
+
+/* ================= RENDER: map ================= */
+function renderMap(){
+  const day=DAYS.find(d=>d.id===sel); if(!day)return;
+  if(!map){
+    map=L.map("map",{zoomControl:false});
+    L.tileLayer("https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
+      {attribution:"© OpenStreetMap © CARTO",maxZoom:19}).addTo(map);
+    L.control.zoom({position:"bottomright"}).addTo(map);
+    mapLayer=L.layerGroup().addTo(map);
+  }
+  mapLayer.clearLayers();
+  const pts=[];let n=0;
+  for(const[p]of PERIODS){
+    day[p].forEach(a=>{
+      if(a.free)return;
+      n++;pts.push([a.lat,a.lng]);
+      const ic=L.divIcon({className:"numpin",iconSize:[26,26],iconAnchor:[13,13],
+        html:`<div style="background:${PCOL[p]}">${n}</div>`});
+      L.marker([a.lat,a.lng],{icon:ic}).addTo(mapLayer)
+        .bindPopup(`<div class="pop-t">${n}. ${esc(a.name)}</div><a class="pop-a" href="${gnav(a)}" target="_blank" rel="noopener">${I.nav} Naviga con Google Maps</a>`);
+    });
+  }
+  if(pts.length>1)L.polyline(pts,{color:"#9aa0ab",weight:2,dashArray:"4 7",opacity:.8}).addTo(mapLayer);
+  const hic=L.divIcon({className:"numpin",iconSize:[26,26],iconAnchor:[13,13],
+    html:`<div style="background:#111318">${I.hotel}</div>`});
+  L.marker([HOTEL.lat,HOTEL.lng],{icon:hic}).addTo(mapLayer)
+    .bindPopup(`<div class="pop-t">${HOTEL.name}</div><a class="pop-a" href="${gnav({q:'NH Madison Hotel New York'})}" target="_blank" rel="noopener">${I.nav} Naviga</a>`);
+  if(pts.length)map.fitBounds(L.latLngBounds(pts).pad(0.25));
+  else map.setView([HOTEL.lat,HOTEL.lng],13);
+  setTimeout(()=>map.invalidateSize(),60);
+}
+
+/* ================= RENDER: info ================= */
+function renderInfo(){
+  document.getElementById("hotel-maps").href=gmap({q:"NH Madison Hotel New York"});
+  document.getElementById("sun-table").innerHTML=DAYS.filter(d=>d.golden)
+    .map(d=>`<div class="trow"><span class="l">${d.dow} ${d.date}</span><span class="r">${d.golden} · ${d.sunset}</span></div>`).join("");
+  let tot=0,done=0;
+  DAYS.forEach(d=>PERIODS.forEach(([p])=>d[p].forEach((a,i)=>{
+    if(a.free)return;tot++;if(checks[key(d.id,p,i)])done++;})));
+  const pct=Math.round(done/tot*100);
+  document.getElementById("progress-txt").textContent=`${done} attività su ${tot} · ${pct}%`;
+  document.getElementById("progress-bar").style.width=pct+"%";
+}
+
+/* ================= TABS ================= */
+window.setTab=t=>{
+  tab=t;
+  document.getElementById("view-day").classList.toggle("hidden",t!=="day");
+  document.getElementById("view-info").style.display=t==="info"?"block":"none";
+  document.getElementById("view-map").style.display=t==="map"?"flex":"none";
+  document.getElementById("main").style.display=t==="map"?"none":"block";
+  ["day","map","info"].forEach(x=>document.getElementById("tab-"+x).classList.toggle("sel",x===t));
+  if(t==="map")renderMap();
+};
+
+/* ================= CLOCK / AUTO ================= */
+function tickClock(){const n=ny();document.getElementById("h-clock").textContent=n.hm+" NYC";}
+setInterval(()=>{tickClock();if(tab==="day")renderDay();},30000);
+
+/* ================= INIT ================= */
+(function(){
+  const n=ny();
+  const today=DAYS.find(d=>d.id===n.date);
+  sel=today?today.id:(n.date<DAYS[0].id?DAYS[0].id:DAYS[DAYS.length-1].id);
+  renderStrip();renderDay();renderInfo();tickClock();
+  const c=document.querySelector(".chip.sel");
+  if(c)c.scrollIntoView({inline:"center",block:"nearest"});
+  if("serviceWorker"in navigator)navigator.serviceWorker.register("sw.js").catch(()=>{});
+})();
+</script>
+</body>
+</html>
