@@ -93,6 +93,8 @@ main{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:14px 18px c
 .act.done .ck .chk{display:block}
 .act .body{flex:1;min-width:0;cursor:pointer}
 .act .t{font-size:14.5px;font-weight:650;letter-spacing:-.1px;line-height:1.3}
+.act .t a{color:inherit;text-decoration:none}
+.act .t a svg{display:inline-block;width:11px;height:11px;margin-left:5px;color:var(--dim);vertical-align:middle}
 .act.done .t{color:var(--dim);text-decoration:line-through}
 .act .sub{display:flex;gap:5px;flex-wrap:wrap;margin-top:4px;align-items:center}
 .act .sub span{display:flex;align-items:center;gap:4px;font-size:11px;font-weight:600;
@@ -235,7 +237,8 @@ train:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="
 gold:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 16a5 5 0 00-10 0"/><path d="M12 8V4M4.9 9.9l1.4 1.4M2 16h2M20 16h2M17.7 11.3l1.4-1.4M3 20h18"/></svg>',
 sunset:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 17a5 5 0 00-10 0"/><path d="M12 3v6m0 0l-2.5-2.5M12 9l2.5-2.5"/><path d="M3 21h18"/></svg>',
 hotel:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-8 9 8"/><path d="M5 9.5V21h14V9.5"/><path d="M9 21v-6h6v6"/></svg>',
-cal:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M8 3v4M16 3v4M3 10h18"/></svg>'
+cal:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M8 3v4M16 3v4M3 10h18"/></svg>',
+ext:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg>'
 };
 
 /* ============ ILLUSTRATIONS (flat pictograms) ============ */
@@ -270,84 +273,84 @@ const A=(name,lat,lng,o={})=>({name,lat,lng,...o});
 const DAYS=[
 {id:"2026-08-21",dow:"Ven",date:"21 Ago",title:"Venerdì 21",area:"Midtown · Arrivo",golden:null,sunset:null,walk:false,
  m:[],
- p:[A("Arrivo a JFK",40.6413,-73.7781,{time:"17:00",note:"dogana all'arrivo",ic:"plane"}),
-    A("Trasferimento in hotel",HOTEL.lat,HOTEL.lng,{time:"~19:00–20:00",q:"NH Madison Hotel New York",ic:"bed"})],
- s:[A("Cena — Bubba Gump Shrimp Co.",40.7566,-73.9863,{q:"Bubba Gump Shrimp Co Times Square",ic:"food"}),
-    A("Times Square",40.7580,-73.9855,{ic:"city"})]},
+ p:[A("Arrivo a JFK",40.6413,-73.7781,{time:"17:00",note:"dogana all'arrivo",ic:"plane",w:"https://it.wikipedia.org/wiki/Aeroporto_Internazionale_John_F._Kennedy"}),
+    A("Trasferimento in hotel",HOTEL.lat,HOTEL.lng,{time:"~19:00–20:00",q:"NH Madison Hotel New York",ic:"bed",w:"https://www.nh-hotels.com/it/hotel/nh-new-york-madison-avenue"})],
+ s:[A("Cena — Bubba Gump Shrimp Co.",40.7566,-73.9863,{q:"Bubba Gump Shrimp Co Times Square",ic:"food",w:"https://www.bubbagump.com"}),
+    A("Times Square",40.7580,-73.9855,{ic:"city",w:"https://it.wikipedia.org/wiki/Times_Square"})]},
 {id:"2026-08-22",dow:"Sab",date:"22 Ago",title:"Sabato 22",area:"Midtown",golden:"18:38",sunset:"19:38",walk:true,
- m:[A("5ª Avenue",40.7539,-73.9810,{q:"5th Avenue and 42nd St New York",ic:"city"}),
-    A("New York Public Library",40.7531,-73.9822,{note:"apre 10:00",ic:"book"}),
-    A("Bryant Park",40.7536,-73.9832,{ic:"park"})],
- p:[A("Grand Central Terminal",40.7527,-73.9772,{ic:"train"}),
-    A("Summit One Vanderbilt",40.7527,-73.9787,{ic:"tower"}),
-    A("St. Patrick's Cathedral",40.7585,-73.9760,{ic:"church"}),
-    A("Lego Store — Rockefeller Center",40.7587,-73.9787,{ic:"lego"}),
-    A("Top of the Rock",40.7591,-73.9794,{ic:"tower"})],
- s:[A("Keens Steakhouse",40.7505,-73.9862,{time:"19:00/19:30",ic:"food"})]},
+ m:[A("5ª Avenue",40.7539,-73.9810,{q:"5th Avenue and 42nd St New York",ic:"city",w:"https://it.wikipedia.org/wiki/Fifth_Avenue"}),
+    A("New York Public Library",40.7531,-73.9822,{note:"apre 10:00",ic:"book",w:"https://it.wikipedia.org/wiki/New_York_Public_Library"}),
+    A("Bryant Park",40.7536,-73.9832,{ic:"park",w:"https://it.wikipedia.org/wiki/Bryant_Park"})],
+ p:[A("Grand Central Terminal",40.7527,-73.9772,{ic:"train",w:"https://it.wikipedia.org/wiki/Grand_Central_Terminal"}),
+    A("Summit One Vanderbilt",40.7527,-73.9787,{ic:"tower",w:"https://summitov.com"}),
+    A("St. Patrick's Cathedral",40.7585,-73.9760,{ic:"church",w:"https://it.wikipedia.org/wiki/Cattedrale_di_San_Patrizio_(New_York)"}),
+    A("Lego Store — Rockefeller Center",40.7587,-73.9787,{ic:"lego",w:"https://www.lego.com/en-us/stores/store/rockefeller-center"}),
+    A("Top of the Rock",40.7591,-73.9794,{ic:"tower",w:"https://www.rockefellercenter.com/attractions/top-of-the-rock-observation-deck/"})],
+ s:[A("Keens Steakhouse",40.7505,-73.9862,{time:"19:00/19:30",ic:"food",w:"https://www.keens.com"})]},
 {id:"2026-08-23",dow:"Dom",date:"23 Ago",title:"Domenica 23",area:"Upper East Side → Midtown (sera)",golden:"18:36",sunset:"19:36",walk:true,
- m:[A("Central Park",40.7690,-73.9760,{ic:"park"})],
- p:[A("Guggenheim (foto esterna)",40.7830,-73.9590,{q:"Solomon R. Guggenheim Museum",ic:"museum"}),
-    A("The Met",40.7794,-73.9632,{note:"apre 10:00",q:"The Metropolitan Museum of Art",ic:"museum"})],
- s:[A("Musical a Broadway",40.7590,-73.9845,{time:"19:00/19:30",note:"spettacolo TBD",q:"Broadway Theater District New York",ic:"music"}),
-    A("Mermaid Oyster Bar",40.7562,-73.9846,{note:"post-spettacolo",q:"Mermaid Oyster Bar Times Square",ic:"food"})]},
+ m:[A("Central Park",40.7690,-73.9760,{ic:"park",w:"https://it.wikipedia.org/wiki/Central_Park"})],
+ p:[A("Guggenheim (foto esterna)",40.7830,-73.9590,{q:"Solomon R. Guggenheim Museum",ic:"museum",w:"https://it.wikipedia.org/wiki/Solomon_R._Guggenheim_Museum"}),
+    A("The Met",40.7794,-73.9632,{note:"apre 10:00",q:"The Metropolitan Museum of Art",ic:"museum",w:"https://it.wikipedia.org/wiki/Metropolitan_Museum_of_Art"})],
+ s:[A("Musical a Broadway",40.7590,-73.9845,{time:"19:00/19:30",note:"spettacolo TBD",q:"Broadway Theater District New York",ic:"music",w:"https://it.wikipedia.org/wiki/Broadway"}),
+    A("Mermaid Oyster Bar",40.7562,-73.9846,{note:"post-spettacolo",q:"Mermaid Oyster Bar Times Square",ic:"food",w:"https://themermaidnyc.com"})]},
 {id:"2026-08-24",dow:"Lun",date:"24 Ago",title:"Lunedì 24",area:"Brooklyn",golden:"18:35",sunset:"19:35",walk:false,
- m:[A("DUMBO",40.7033,-73.9881,{q:"DUMBO Brooklyn",ic:"city"}),
-    A("Brooklyn Bridge Park",40.7002,-73.9967,{ic:"park"}),
-    A("Squibb Park Bridge",40.7008,-73.9967,{ic:"bridge"}),
-    A("Brooklyn Heights Promenade",40.6968,-73.9973,{ic:"park"})],
- p:[A("Brooklyn Bridge (passeggiata)",40.7061,-73.9969,{q:"Brooklyn Bridge pedestrian entrance",ic:"bridge"}),
-    A("Coney Island",40.5749,-73.9850,{ic:"wheel"}),
-    A("Nathan's Famous",40.5754,-73.9814,{q:"Nathan's Famous Coney Island",ic:"food"})],
+ m:[A("DUMBO",40.7033,-73.9881,{q:"DUMBO Brooklyn",ic:"city",w:"https://it.wikipedia.org/wiki/Dumbo_(Brooklyn)"}),
+    A("Brooklyn Bridge Park",40.7002,-73.9967,{ic:"park",w:"https://brooklynbridgepark.org"}),
+    A("Squibb Park Bridge",40.7008,-73.9967,{ic:"bridge",w:"https://en.wikipedia.org/wiki/Squibb_Park_Bridge"}),
+    A("Brooklyn Heights Promenade",40.6968,-73.9973,{ic:"park",w:"https://en.wikipedia.org/wiki/Brooklyn_Heights_Promenade"})],
+ p:[A("Brooklyn Bridge (passeggiata)",40.7061,-73.9969,{q:"Brooklyn Bridge pedestrian entrance",ic:"bridge",w:"https://it.wikipedia.org/wiki/Ponte_di_Brooklyn"}),
+    A("Coney Island",40.5749,-73.9850,{ic:"wheel",w:"https://it.wikipedia.org/wiki/Coney_Island"}),
+    A("Nathan's Famous",40.5754,-73.9814,{q:"Nathan's Famous Coney Island",ic:"food",w:"https://www.nathansfamous.com"})],
  s:[A("Serata libera",HOTEL.lat,HOTEL.lng,{free:true,ic:"moon"})]},
 {id:"2026-08-25",dow:"Mar",date:"25 Ago",title:"Martedì 25",area:"Lower Manhattan → Meatpacking → New Jersey (sera)",golden:"18:33",sunset:"19:33",walk:false,
- m:[A("9/11 Memorial & Museum",40.7115,-74.0134,{note:"apre 09:00",ic:"museum"}),
-    A("One World Observatory",40.7130,-74.0131,{ic:"tower"}),
-    A("The Oculus",40.7116,-74.0110,{q:"Oculus World Trade Center",ic:"city"})],
- p:[A("Whitney Museum of American Art",40.7396,-74.0089,{ic:"museum"})],
- s:[A("Bruno Mars — MetLife Stadium",40.8135,-74.0745,{time:"19:00",ticket:true,ic:"music"})]},
+ m:[A("9/11 Memorial & Museum",40.7115,-74.0134,{note:"apre 09:00",ic:"museum",w:"https://www.911memorial.org"}),
+    A("One World Observatory",40.7130,-74.0131,{ic:"tower",w:"https://oneworldobservatory.com"}),
+    A("The Oculus",40.7116,-74.0110,{q:"Oculus World Trade Center",ic:"city",w:"https://en.wikipedia.org/wiki/World_Trade_Center_station_(PATH)"})],
+ p:[A("Whitney Museum of American Art",40.7396,-74.0089,{ic:"museum",w:"https://whitney.org"})],
+ s:[A("Bruno Mars — MetLife Stadium",40.8135,-74.0745,{time:"19:00",ticket:true,ic:"music",w:"https://www.metlifestadium.com"})]},
 {id:"2026-08-26",dow:"Mer",date:"26 Ago",title:"Mercoledì 26",area:"Midtown → UWS / Hell's Kitchen → Hudson → Weehawken (sera)",golden:"18:32",sunset:"19:32",walk:false,
- m:[A("MoMA",40.7614,-73.9776,{note:"apre 10:30",q:"Museum of Modern Art New York",ic:"museum"})],
- p:[A("Lincoln Center",40.7725,-73.9835,{ic:"music"}),
-    A("USS Intrepid — Pier 86",40.7645,-73.9995,{q:"Intrepid Museum New York",ic:"boat"}),
-    A("NYC Ferry: Pier 79 → Pier 11",40.7601,-74.0027,{note:"skyline nord→sud",q:"NYC Ferry Midtown West Pier 79",ic:"boat"})],
- s:[A("NY Waterway → Weehawken",40.7013,-74.0132,{note:"da Brookfield Place / Pier 11",q:"NY Waterway Terminal Brookfield Place",ic:"boat"}),
-    A("Hamilton Park (vista skyline)",40.7680,-74.0177,{q:"Hamilton Park Weehawken",ic:"park"}),
-    A("Blu On The Hudson",40.7737,-74.0122,{q:"Blu on the Hudson Weehawken",ic:"food"})]},
+ m:[A("MoMA",40.7614,-73.9776,{note:"apre 10:30",q:"Museum of Modern Art New York",ic:"museum",w:"https://www.moma.org"})],
+ p:[A("Lincoln Center",40.7725,-73.9835,{ic:"music",w:"https://www.lincolncenter.org"}),
+    A("USS Intrepid — Pier 86",40.7645,-73.9995,{q:"Intrepid Museum New York",ic:"boat",w:"https://intrepidmuseum.org"}),
+    A("NYC Ferry: Pier 79 → Pier 11",40.7601,-74.0027,{note:"skyline nord→sud",q:"NYC Ferry Midtown West Pier 79",ic:"boat",w:"https://www.ferry.nyc"})],
+ s:[A("NY Waterway → Weehawken",40.7013,-74.0132,{note:"da Brookfield Place / Pier 11",q:"NY Waterway Terminal Brookfield Place",ic:"boat",w:"https://www.nywaterway.com"}),
+    A("Hamilton Park (vista skyline)",40.7680,-74.0177,{q:"Hamilton Park Weehawken",ic:"park",w:"https://www.google.com/search?q=Hamilton+Park+Weehawken+skyline+view"}),
+    A("Blu On The Hudson",40.7737,-74.0122,{q:"Blu on the Hudson Weehawken",ic:"food",w:"https://bluonthehudson.com"})]},
 {id:"2026-08-27",dow:"Gio",date:"27 Ago",title:"Giovedì 27",area:"Lower Manhattan → Midtown East (sera)",golden:"18:30",sunset:"19:30",walk:false,
- m:[A("Ferry da Battery Park",40.7013,-74.0158,{time:"09:00",ticket:true,q:"Statue City Cruises Battery Park",ic:"boat"}),
-    A("Liberty Island",40.6892,-74.0445,{q:"Statue of Liberty",ic:"torch"}),
-    A("Ellis Island",40.6995,-74.0396,{ic:"museum"})],
- p:[A("Wall Street",40.7069,-74.0113,{ic:"city"}),
-    A("Charging Bull",40.7056,-74.0134,{ic:"city"}),
-    A("NY Supreme Court — Foley Square",40.7143,-74.0018,{q:"New York County Supreme Court",ic:"museum"}),
-    A("Chrysler Building",40.7516,-73.9755,{ic:"tower"}),
-    A("Chinatown",40.7158,-73.9970,{q:"Chinatown Manhattan",ic:"city"})],
- s:[A("Grand Central Oyster Bar",40.7527,-73.9772,{time:"19:00",note:"chiude 21:30",ic:"food"})]},
+ m:[A("Ferry da Battery Park",40.7013,-74.0158,{time:"09:00",ticket:true,q:"Statue City Cruises Battery Park",ic:"boat",w:"https://www.cityexperiences.com/new-york/city-cruises/statue/"}),
+    A("Liberty Island",40.6892,-74.0445,{q:"Statue of Liberty",ic:"torch",w:"https://it.wikipedia.org/wiki/Statua_della_Libert%C3%A0"}),
+    A("Ellis Island",40.6995,-74.0396,{ic:"museum",w:"https://it.wikipedia.org/wiki/Ellis_Island"})],
+ p:[A("Wall Street",40.7069,-74.0113,{ic:"city",w:"https://it.wikipedia.org/wiki/Wall_Street"}),
+    A("Charging Bull",40.7056,-74.0134,{ic:"city",w:"https://it.wikipedia.org/wiki/Charging_Bull"}),
+    A("NY Supreme Court — Foley Square",40.7143,-74.0018,{q:"New York County Supreme Court",ic:"museum",w:"https://en.wikipedia.org/wiki/New_York_County_Courthouse"}),
+    A("Chrysler Building",40.7516,-73.9755,{ic:"tower",w:"https://it.wikipedia.org/wiki/Chrysler_Building"}),
+    A("Chinatown",40.7158,-73.9970,{q:"Chinatown Manhattan",ic:"city",w:"https://it.wikipedia.org/wiki/Chinatown_(Manhattan)"})],
+ s:[A("Grand Central Oyster Bar",40.7527,-73.9772,{time:"19:00",note:"chiude 21:30",ic:"food",w:"https://www.oysterbarny.com"})]},
 {id:"2026-08-28",dow:"Ven",date:"28 Ago",title:"Venerdì 28",area:"Lower Manhattan → LES → Gramercy → Midtown → Bronx (sera)",golden:"18:29",sunset:"19:29",walk:false,
- m:[A("Governors Island",40.6895,-74.0168,{ic:"park"}),
-    A("Katz's Delicatessen (pranzo)",40.7223,-73.9874,{q:"Katz's Delicatessen",ic:"food"})],
- p:[A("Gramercy Park",40.7379,-73.9860,{ic:"park"}),
-    A("Flatiron Building",40.7411,-73.9897,{ic:"tower"}),
-    A("Empire State Building",40.7484,-73.9857,{ic:"tower"}),
-    A("UN Headquarters",40.7489,-73.9680,{q:"United Nations Headquarters",ic:"flag"}),
-    A("Roosevelt Island Tramway",40.7614,-73.9642,{ic:"train"})],
- s:[A("Yankees vs Red Sox — Yankee Stadium",40.8296,-73.9262,{time:"19:00",ticket:true,ic:"ball"})]},
+ m:[A("Governors Island",40.6895,-74.0168,{ic:"park",w:"https://en.wikipedia.org/wiki/Governors_Island"}),
+    A("Katz's Delicatessen (pranzo)",40.7223,-73.9874,{q:"Katz's Delicatessen",ic:"food",w:"https://katzsdelicatessen.com"})],
+ p:[A("Gramercy Park",40.7379,-73.9860,{ic:"park",w:"https://it.wikipedia.org/wiki/Gramercy_Park"}),
+    A("Flatiron Building",40.7411,-73.9897,{ic:"tower",w:"https://it.wikipedia.org/wiki/Flatiron_Building"}),
+    A("Empire State Building",40.7484,-73.9857,{ic:"tower",w:"https://it.wikipedia.org/wiki/Empire_State_Building"}),
+    A("UN Headquarters",40.7489,-73.9680,{q:"United Nations Headquarters",ic:"flag",w:"https://it.wikipedia.org/wiki/Palazzo_di_Vetro"}),
+    A("Roosevelt Island Tramway",40.7614,-73.9642,{ic:"train",w:"https://en.wikipedia.org/wiki/Roosevelt_Island_Tramway"})],
+ s:[A("Yankees vs Red Sox — Yankee Stadium",40.8296,-73.9262,{time:"19:00",ticket:true,ic:"ball",w:"https://it.wikipedia.org/wiki/Yankee_Stadium"})]},
 {id:"2026-08-29",dow:"Sab",date:"29 Ago",title:"Sabato 29",area:"Chelsea / Hudson Yards → Greenwich Village (sera)",golden:"18:27",sunset:"19:27",walk:true,
- m:[A("Edge Observatory",40.7538,-74.0011,{note:"apre 08:00",q:"Edge Hudson Yards",ic:"tower"}),
-    A("Vessel",40.7540,-74.0022,{note:"apre 11:00",q:"Vessel Hudson Yards",ic:"tower"})],
- p:[A("High Line",40.7480,-74.0048,{q:"The High Line",ic:"park"}),
-    A("Little Island",40.7420,-74.0100,{ic:"park"}),
-    A("Pier 57 Rooftop Park",40.7425,-74.0084,{ic:"park"})],
- s:[A("Chelsea Market (cena)",40.7424,-74.0060,{ic:"food"}),
-    A("SoHo",40.7233,-74.0030,{q:"SoHo New York",ic:"city"}),
-    A("Washington Square Arch",40.7314,-73.9971,{ic:"arch"}),
-    A("Blue Note Jazz Club",40.7309,-74.0006,{time:"22:30",ic:"music"})]},
+ m:[A("Edge Observatory",40.7538,-74.0011,{note:"apre 08:00",q:"Edge Hudson Yards",ic:"tower",w:"https://www.edgenyc.com"}),
+    A("Vessel",40.7540,-74.0022,{note:"apre 11:00",q:"Vessel Hudson Yards",ic:"tower",w:"https://en.wikipedia.org/wiki/Vessel_(structure)"})],
+ p:[A("High Line",40.7480,-74.0048,{q:"The High Line",ic:"park",w:"https://it.wikipedia.org/wiki/High_Line"}),
+    A("Little Island",40.7420,-74.0100,{ic:"park",w:"https://littleisland.org"}),
+    A("Pier 57 Rooftop Park",40.7425,-74.0084,{ic:"park",w:"https://en.wikipedia.org/wiki/Pier_57"})],
+ s:[A("Chelsea Market (cena)",40.7424,-74.0060,{ic:"food",w:"https://www.chelseamarket.com"}),
+    A("SoHo",40.7233,-74.0030,{q:"SoHo New York",ic:"city",w:"https://it.wikipedia.org/wiki/SoHo_(Manhattan)"}),
+    A("Washington Square Arch",40.7314,-73.9971,{ic:"arch",w:"https://it.wikipedia.org/wiki/Washington_Square_Park"}),
+    A("Blue Note Jazz Club",40.7309,-74.0006,{time:"22:30",ic:"music",w:"https://www.bluenotejazz.com/nyc/"})]},
 {id:"2026-08-30",dow:"Dom",date:"30 Ago",title:"Domenica 30",area:"Harlem · Partenza",golden:null,sunset:null,walk:false,
- m:[A("Gospel — Abyssinian Baptist Church",40.8168,-73.9407,{time:"fila 10:00 · inizio 11:00",ic:"church"}),
-    A("Soul food brunch — Sylvia's",40.8089,-73.9442,{q:"Sylvia's Restaurant Harlem",ic:"food"}),
-    A("Apollo Theater",40.8100,-73.9498,{ic:"music"})],
+ m:[A("Gospel — Abyssinian Baptist Church",40.8168,-73.9407,{time:"fila 10:00 · inizio 11:00",ic:"church",w:"https://abyssinian.org"}),
+    A("Soul food brunch — Sylvia's",40.8089,-73.9442,{q:"Sylvia's Restaurant Harlem",ic:"food",w:"https://www.sylviasrestaurant.com"}),
+    A("Apollo Theater",40.8100,-73.9498,{ic:"music",w:"https://www.apollotheater.org"})],
  p:[A("Rientro in hotel + checkout",HOTEL.lat,HOTEL.lng,{note:"uscita per JFK entro 18:00",q:"NH Madison Hotel New York",ic:"case"})],
- s:[A("Partenza per JFK — volo 22:00",40.6413,-73.7781,{q:"JFK Airport",ic:"plane"})]}
+ s:[A("Partenza per JFK — volo 22:00",40.6413,-73.7781,{q:"JFK Airport",ic:"plane",w:"https://www.jfkairport.com"})]}
 ];
 const PERIODS=[["m","Mattina"],["p","Pomeriggio"],["s","Sera"]];
 const PCOL={m:"#F5A623",p:"#5B8DEF",s:"#8B7CF6"};
@@ -368,7 +371,7 @@ function dayState(id){const n=ny();return id<n.date?"past":(id>n.date?"future":"
 
 /* ================= HELPERS ================= */
 const gmap=a=>"https://www.google.com/maps/search/?api=1&query="+encodeURIComponent(a.q||a.name+" New York");
-const gnav=a=>"https://www.google.com/maps/dir/?api=1&destination="+encodeURIComponent(a.q||a.name+" New York")+"&travelmode=transit";
+const gnav=(a,o,walk)=>"https://www.google.com/maps/dir/?api=1"+(o?"&origin="+o.lat+"%2C"+o.lng:"")+"&destination="+encodeURIComponent(a.q||a.name+" New York")+"&travelmode="+(walk?"walking":"transit");
 const key=(d,p,i)=>`${d}|${p}|${i}`;
 const esc=s=>s.replace(/&/g,"&amp;").replace(/</g,"&lt;");
 
@@ -421,6 +424,7 @@ function renderDay(){
     ${day.golden?`<span>${I.gold}Golden ${day.golden}</span><span>${I.sunset}Tramonto ${day.sunset}</span>`:""}
     </div></div>`;
 
+  let prev=HOTEL;
   for(const[p,label]of PERIODS){
     const list=day[p]; if(!list.length)continue;
     const allDone=list.every((a,i)=>checks[key(day.id,p,i)]||a.free);
@@ -432,10 +436,11 @@ function renderDay(){
     list.forEach((a,i)=>{
       const k=key(day.id,p,i), done=!!checks[k];
       const isNext=nextK===p+i;
+      const org=prev; if(!a.free)prev=a;
       html+=`<div class="act ${done?"done":""}">
         <div class="ck" style="--ic:${PCOL[p]};--icbg:${PCOL[p]}1a" onclick="toggle('${k}')"><span class="pic">${ILL[a.ic]||ILL.city}</span><span class="chk">${I.check}</span></div>
         <div class="body" onclick="toggle('${k}')">
-          <div class="t">${esc(a.name)}</div>
+          <div class="t">${a.w?`<a href="${a.w}" target="_blank" rel="noopener" onclick="event.stopPropagation()">${esc(a.name)}${I.ext}</a>`:esc(a.name)}</div>
           ${(isNext&&!done)||a.time||a.note||a.ticket?`<div class="sub">
             ${isNext&&!done?'<span class="next">Prossima</span>':""}
             ${a.time?`<span>${I.clock}${a.time}</span>`:""}
@@ -443,7 +448,7 @@ function renderDay(){
             ${a.ticket?`<span class="tick">${I.ticket}Biglietti ok</span>`:""}
           </div>`:""}
         </div>
-        ${a.free?"":`<a class="go" href="${gnav(a)}" target="_blank" rel="noopener" onclick="event.stopPropagation()">${I.nav}</a>`}
+        ${a.free?"":`<a class="go" href="${gnav(a,org,day.walk)}" target="_blank" rel="noopener" onclick="event.stopPropagation()">${I.nav}</a>`}
       </div>`;
     });
     html+=`</div></div>`;
@@ -465,15 +470,16 @@ function renderMap(){
     mapLayer=L.layerGroup().addTo(map);
   }
   mapLayer.clearLayers();
-  const pts=[];let n=0;
+  const pts=[];let n=0,prev=HOTEL;
   for(const[p]of PERIODS){
     day[p].forEach(a=>{
       if(a.free)return;
+      const org=prev; prev=a;
       n++;pts.push([a.lat,a.lng]);
       const ic=L.divIcon({className:"numpin",iconSize:[26,26],iconAnchor:[13,13],
         html:`<div style="background:${PCOL[p]}">${n}</div>`});
       L.marker([a.lat,a.lng],{icon:ic}).addTo(mapLayer)
-        .bindPopup(`<div class="pop-t">${n}. ${esc(a.name)}</div><a class="pop-a" href="${gnav(a)}" target="_blank" rel="noopener">${I.nav} Naviga con Google Maps</a>`);
+        .bindPopup(`<div class="pop-t">${n}. ${esc(a.name)}</div><a class="pop-a" href="${gnav(a,org,day.walk)}" target="_blank" rel="noopener">${I.nav} Naviga con Google Maps</a>`);
     });
   }
   if(pts.length>1)L.polyline(pts,{color:"#9aa0ab",weight:2,dashArray:"4 7",opacity:.8}).addTo(mapLayer);
