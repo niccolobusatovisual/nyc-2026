@@ -5,157 +5,178 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
 <title>Andre & Mary · New York 2026</title>
 <meta name="description" content="Andre & Mary — Itinerario New York 21–30 agosto 2026">
-<meta name="theme-color" content="#F1F1F3">
+<meta name="theme-color" content="#0A0A0A">
 <link rel="manifest" href="manifest.webmanifest">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="NY 2026">
 <link rel="apple-touch-icon" href="icon-180.png">
 <link rel="icon" href="icon-192.png">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 <style>
 :root{
-  --bg:#F1F1F3; --card:#FFFFFF; --soft:#F5F5F7; --line:#EAEAEE;
-  --txt:#111318; --muted:#8A8F98; --dim:#C3C6CD;
-  --m:#F5A623; --p:#5B8DEF; --s:#8B7CF6;
-  --ok:#34C759; --amber:#F5A623;
-  --sh:0 1px 2px rgba(16,24,40,.04), 0 10px 28px -14px rgba(16,24,40,.14);
+  --bg:#0A0A0A; --card:#161616; --card2:#1F1F1F; --line:#2A2A2A;
+  --txt:#F2EFE6; --muted:#9A968A; --dim:#55524B;
+  --m:#FCCC0A; --p:#FF6319; --s:#EE352E;
+  --ok:#00933C; --amber:#F6A21D; --blue:#0039A6;
   --sat:env(safe-area-inset-top,0px); --sab:env(safe-area-inset-bottom,0px);
 }
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{height:100%}
 body{
   background:var(--bg); color:var(--txt);
-  font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text','Segoe UI',Roboto,sans-serif;
+  font-family:'Helvetica Neue',Helvetica,Arial,-apple-system,sans-serif;
   overscroll-behavior-y:none;
 }
 #app{display:flex;flex-direction:column;height:100dvh}
 svg{display:block}
 
 /* ---------- header ---------- */
-header{padding:calc(var(--sat) + 14px) 18px 0 18px;flex:none;background:var(--bg)}
-.h-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:14px}
-.h-top .who{font-size:14px;font-weight:600;color:var(--muted);letter-spacing:-.1px}
-.h-top h1{font-size:26px;font-weight:800;letter-spacing:-.6px;margin-top:2px}
-.clockpill{display:flex;align-items:center;gap:6px;background:var(--card);border-radius:99px;
-  padding:8px 13px;box-shadow:var(--sh);font-size:12.5px;font-weight:600;color:var(--txt);
+header{padding:calc(var(--sat) + 16px) 18px 0 18px;flex:none;background:var(--bg)}
+.h-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:12px}
+.h-top .who{font-size:11px;font-weight:700;color:var(--muted);letter-spacing:2px;text-transform:uppercase}
+.h-top h1{font-size:28px;font-weight:800;letter-spacing:-.8px;margin-top:3px}
+.clockpill{display:flex;align-items:center;gap:6px;background:var(--card);border:1px solid var(--line);
+  border-radius:4px;padding:8px 12px;font-size:12.5px;font-weight:700;color:var(--txt);
   font-variant-numeric:tabular-nums;margin-top:4px}
-.clockpill svg{width:14px;height:14px;color:var(--muted)}
-.daystrip{display:flex;gap:8px;overflow-x:auto;padding:2px 2px 14px;scrollbar-width:none}
+.clockpill svg{width:14px;height:14px;color:var(--m)}
+.stripes{display:flex;flex-direction:column;gap:4px;margin-bottom:14px}
+.stripes i{display:block;height:5px;border-radius:3px}
+.stripes i:nth-child(1){width:100%}
+.stripes i:nth-child(2){width:78%}
+.stripes i:nth-child(3){width:56%}
+.daystrip{display:flex;gap:7px;overflow-x:auto;padding:2px 2px 14px;scrollbar-width:none}
 .daystrip::-webkit-scrollbar{display:none}
-.chip{flex:none;width:54px;padding:9px 0 8px;border-radius:18px;text-align:center;
-  background:var(--card);box-shadow:var(--sh);color:var(--muted);cursor:pointer;transition:all .15s}
-.chip .dw{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.6px}
+.chip{flex:none;width:54px;padding:9px 0 8px;border-radius:6px;text-align:center;
+  background:var(--card);border:1px solid var(--line);color:var(--muted);cursor:pointer;transition:all .15s}
+.chip .dw{font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:1px}
 .chip .dn{font-size:18px;font-weight:800;color:var(--txt);margin-top:2px}
-.chip.sel{background:var(--txt)}
-.chip.sel .dw{color:#9aa0ab}
-.chip.sel .dn{color:#fff}
-.chip.past:not(.sel){opacity:.45}
-.chip .dot{width:5px;height:5px;border-radius:3px;background:var(--amber);margin:4px auto 0;visibility:hidden}
+.chip.sel{background:var(--txt);border-color:var(--txt)}
+.chip.sel .dw{color:#6b675c}
+.chip.sel .dn{color:#0A0A0A}
+.chip.past:not(.sel){opacity:.4}
+.chip .dot{width:6px;height:6px;border-radius:3px;background:var(--m);margin:4px auto 0;visibility:hidden}
 .chip.today .dot{visibility:visible}
 
 /* ---------- main ---------- */
-main{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:14px 18px calc(var(--sab) + 96px)}
-.banner{display:flex;align-items:center;gap:9px;background:var(--card);border-radius:18px;
-  padding:12px 15px;margin-bottom:14px;font-size:13px;color:var(--muted);box-shadow:var(--sh)}
-.banner b{color:var(--txt);font-weight:700}
-.banner .pulse{width:8px;height:8px;border-radius:4px;background:var(--ok);flex:none;animation:pu 1.6s infinite}
+main{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:14px 18px calc(var(--sab) + 86px)}
+.banner{display:flex;align-items:center;gap:10px;background:var(--card);border:1px solid var(--line);
+  border-radius:6px;padding:12px 14px;margin-bottom:14px;font-size:13px;font-weight:500;color:var(--muted)}
+.banner b{color:var(--txt);font-weight:800}
+.banner .pulse{width:9px;height:9px;border-radius:5px;background:var(--ok);flex:none;animation:pu 1.6s infinite}
 @keyframes pu{0%,100%{opacity:1}50%{opacity:.25}}
-.banner svg{width:16px;height:16px;color:var(--muted);flex:none}
+.banner svg{width:16px;height:16px;color:var(--m);flex:none}
 
-.dayhead{margin:2px 2px 14px}
-.dayhead h2{font-size:22px;font-weight:800;letter-spacing:-.5px}
-.dayhead .area{font-size:13px;color:var(--muted);margin-top:3px;line-height:1.4}
-.meta{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
-.meta span{display:flex;align-items:center;gap:6px;font-size:11.5px;font-weight:600;
-  background:var(--card);box-shadow:var(--sh);border-radius:99px;padding:6px 11px;color:var(--muted)}
+.dayhead{margin:4px 2px 14px}
+.dayhead h2{font-size:24px;font-weight:800;letter-spacing:-.6px}
+.dayhead .area{font-size:13px;color:var(--muted);margin-top:4px;line-height:1.45}
+.meta{display:flex;gap:7px;flex-wrap:wrap;margin-top:10px}
+.meta span{display:flex;align-items:center;gap:6px;font-size:11px;font-weight:700;
+  background:var(--card);border:1px solid var(--line);border-radius:4px;padding:6px 10px;color:var(--muted);
+  text-transform:uppercase;letter-spacing:.5px}
 .meta svg{width:13px;height:13px}
 
 /* ---------- period ---------- */
-.period{margin-bottom:18px;transition:opacity .2s}
-.period.done-p{opacity:.5}
-.p-head{display:flex;align-items:center;gap:8px;padding:0 4px 9px}
-.p-head .pdot{width:8px;height:8px;border-radius:4px}
-.p-head .nm{font-size:11.5px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:var(--muted)}
-.p-head .live-tag{margin-left:auto;font-size:10px;font-weight:700;letter-spacing:.8px;
-  color:#fff;background:var(--txt);border-radius:99px;padding:4px 10px}
-.acts{display:flex;flex-direction:column;gap:8px}
-.act{display:flex;align-items:center;gap:12px;background:var(--card);border-radius:18px;
-  padding:11px 12px;box-shadow:var(--sh)}
+.period{margin-bottom:20px;transition:opacity .2s}
+.period.done-p{opacity:.45}
+.p-head{display:flex;align-items:center;gap:9px;padding:0 2px 10px}
+.p-head .pdot{width:22px;height:22px;border-radius:11px;display:grid;place-items:center;
+  font-size:11px;font-weight:800}
+.p-head .pdot.m{background:var(--m);color:#0A0A0A}
+.p-head .pdot.p{background:var(--p);color:#fff}
+.p-head .pdot.s{background:var(--s);color:#fff}
+.p-head .nm{font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:2px;color:var(--txt)}
+.p-head .live-tag{margin-left:auto;font-size:10px;font-weight:800;letter-spacing:1.5px;
+  color:#fff;background:var(--ok);border-radius:4px;padding:4px 9px;text-transform:uppercase}
+.acts{display:flex;flex-direction:column;gap:7px}
+.act{display:flex;align-items:center;gap:12px;background:var(--card);border:1px solid var(--line);
+  border-radius:8px;padding:11px 12px}
 .act:active{transform:scale(.985)}
 .ck{flex:none;width:40px;height:40px;border-radius:20px;display:grid;place-items:center;
-  color:var(--ic,var(--muted));background:var(--icbg,var(--soft));transition:all .15s;cursor:pointer}
+  transition:all .15s;cursor:pointer}
+.ck.m{background:var(--m);color:#0A0A0A}
+.ck.p{background:var(--p);color:#fff}
+.ck.s{background:var(--s);color:#fff}
 .ck svg{width:19px;height:19px}
 .ck .chk{display:none}
-.act.done .ck{background:var(--txt);color:#fff}
+.act.done .ck{background:var(--ok);color:#fff}
 .act.done .ck .pic{display:none}
 .act.done .ck .chk{display:block}
 .act .body{flex:1;min-width:0;cursor:pointer}
-.act .t{font-size:14.5px;font-weight:650;letter-spacing:-.1px;line-height:1.3}
+.act .t{font-size:14.5px;font-weight:700;letter-spacing:-.1px;line-height:1.3}
 .act .t a{color:inherit;text-decoration:none}
-.act .t a svg{display:inline-block;width:11px;height:11px;margin-left:5px;color:var(--dim);vertical-align:middle}
+.act .t svg{width:11px;height:11px;color:var(--dim);display:inline-block;vertical-align:baseline;margin-left:4px}
 .act.done .t{color:var(--dim);text-decoration:line-through}
-.act .sub{display:flex;gap:5px;flex-wrap:wrap;margin-top:4px;align-items:center}
-.act .sub span{display:flex;align-items:center;gap:4px;font-size:11px;font-weight:600;
-  color:var(--muted);background:var(--soft);border-radius:7px;padding:3px 7px}
+.act .sub{display:flex;gap:5px;flex-wrap:wrap;margin-top:5px;align-items:center}
+.act .sub span{display:flex;align-items:center;gap:4px;font-size:10.5px;font-weight:700;
+  color:var(--muted);background:var(--card2);border-radius:4px;padding:3px 7px}
 .act .sub svg{width:11px;height:11px}
-.act .sub .tick{color:var(--ok)}
-.act .sub .next{color:#fff;background:var(--amber)}
-.act .go{flex:none;width:38px;height:38px;border-radius:19px;background:var(--soft);
-  display:grid;place-items:center;text-decoration:none;color:var(--txt)}
+.act .sub .tick{color:#4cc470}
+.act .sub .next{color:#0A0A0A;background:var(--m)}
+.act .go{flex:none;width:38px;height:38px;border-radius:6px;background:var(--card2);
+  border:1px solid var(--line);display:grid;place-items:center;text-decoration:none;color:var(--txt)}
 .act .go svg{width:16px;height:16px}
 .act .go:active{background:var(--line)}
 
 /* ---------- map ---------- */
 #view-map{display:none;flex-direction:column;flex:1;min-height:0}
-#map{flex:1;background:#e9eaee}
+#map{flex:1;background:#111}
 .map-legend{flex:none;display:flex;gap:16px;justify-content:center;padding:10px 0;
-  background:var(--card);border-top:1px solid var(--line);font-size:11.5px;font-weight:600;color:var(--muted)}
-.map-legend i{display:inline-block;width:8px;height:8px;border-radius:4px;margin-right:5px}
-.leaflet-popup-content-wrapper{background:var(--card);color:var(--txt);border-radius:14px;box-shadow:var(--sh)}
-.leaflet-popup-tip{background:var(--card)}
+  background:var(--card);border-top:1px solid var(--line);font-size:11px;font-weight:700;color:var(--muted);
+  text-transform:uppercase;letter-spacing:1px}
+.map-legend i{display:inline-block;width:9px;height:9px;border-radius:5px;margin-right:5px}
+.leaflet-popup-content-wrapper{background:var(--card2);color:var(--txt);border-radius:8px}
+.leaflet-popup-tip{background:var(--card2)}
 .leaflet-popup-content{margin:11px 14px;font-family:inherit}
-.pop-t{font-weight:700;font-size:13.5px;margin-bottom:6px}
-.pop-a{display:inline-flex;align-items:center;gap:5px;font-size:12px;color:var(--p);text-decoration:none;font-weight:700}
+.pop-t{font-weight:800;font-size:13.5px;margin-bottom:6px}
+.pop-a{display:inline-flex;align-items:center;gap:5px;font-size:12px;color:var(--m);text-decoration:none;font-weight:700}
 .pop-a svg{width:12px;height:12px}
 .numpin{background:none;border:none}
 .numpin div{width:26px;height:26px;border-radius:13px;display:grid;place-items:center;
-  color:#fff;font-weight:800;font-size:12px;border:2px solid #fff;box-shadow:0 2px 8px rgba(16,24,40,.3)}
+  font-weight:800;font-size:12px;border:2px solid #0A0A0A;box-shadow:0 2px 8px rgba(0,0,0,.6)}
 .numpin div svg{width:13px;height:13px}
 
 /* ---------- info ---------- */
-.info-card{background:var(--card);border-radius:20px;padding:16px 17px;margin-bottom:12px;box-shadow:var(--sh)}
-.info-card h3{display:flex;align-items:center;gap:8px;font-size:11.5px;font-weight:700;
-  text-transform:uppercase;letter-spacing:1.2px;color:var(--muted);margin-bottom:12px}
-.info-card h3 svg{width:15px;height:15px}
-.info-card .big{font-size:16.5px;font-weight:750;letter-spacing:-.2px}
+.info-card{background:var(--card);border:1px solid var(--line);border-radius:8px;
+  padding:16px;margin-bottom:12px}
+.info-card h3{display:flex;align-items:center;gap:8px;font-size:11px;font-weight:800;
+  text-transform:uppercase;letter-spacing:2px;color:var(--muted);margin-bottom:12px}
+.info-card h3 svg{width:15px;height:15px;color:var(--m)}
+.info-card .big{font-size:17px;font-weight:800;letter-spacing:-.2px}
 .info-card p{font-size:13.5px;color:var(--muted);line-height:1.5;margin-top:4px}
-.info-card a.lnk{display:inline-flex;align-items:center;gap:6px;color:var(--p);
+.info-card a.lnk{display:inline-flex;align-items:center;gap:6px;color:var(--m);
   text-decoration:none;font-weight:700;font-size:13.5px;margin-top:8px}
 .info-card a.lnk svg{width:13px;height:13px}
 .trow{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--line);font-size:13.5px}
 .trow:last-child{border-bottom:none;padding-bottom:0}
-.trow .l{color:var(--muted);font-weight:600} .trow .r{font-weight:650;font-variant-numeric:tabular-nums}
-.tk{display:flex;align-items:center;gap:12px;padding:9px 0;border-bottom:1px solid var(--line)}
-.tk:last-child{border-bottom:none;padding-bottom:0}
-.tk .em{flex:none;width:36px;height:36px;border-radius:18px;background:var(--soft);display:grid;place-items:center}
-.tk .em svg{width:17px;height:17px;color:var(--txt)}
-.tk .tt{font-size:14px;font-weight:650}
-.tk small{display:block;color:var(--muted);font-size:12px;font-weight:500;margin-top:1px}
-.pbar{height:8px;border-radius:4px;background:var(--soft);overflow:hidden;margin-top:10px}
-.pbar i{display:block;height:100%;border-radius:4px;background:var(--txt);transition:width .3s}
+.trow .l{color:var(--muted);font-weight:600} .trow .r{font-weight:700;font-variant-numeric:tabular-nums}
+/* ticket-style card */
+.info-card.ticket{background:#F2EFE6;border:none;padding:0;overflow:hidden;color:#0A0A0A}
+.ticket .th{display:flex;align-items:center;gap:8px;background:var(--s);color:#fff;
+  padding:13px 16px;font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:2px}
+.ticket .th svg{width:15px;height:15px}
+.tk{display:flex;align-items:center;gap:12px;padding:10px 16px;border-bottom:1px dashed #b9b4a4}
+.tk:last-of-type{border-bottom:none}
+.tk .em{flex:none;width:36px;height:36px;border-radius:18px;background:#e6e1d0;display:grid;place-items:center}
+.tk .em svg{width:17px;height:17px;color:#0A0A0A}
+.tk .tt{font-size:14px;font-weight:700;color:#0A0A0A}
+.tk small{display:block;color:#6b675c;font-size:12px;font-weight:500;margin-top:1px}
+.barcode{height:34px;margin:12px 16px 16px;
+  background:repeating-linear-gradient(90deg,#0A0A0A 0 2px,transparent 2px 5px,#0A0A0A 5px 6px,transparent 6px 9px,#0A0A0A 9px 12px,transparent 12px 14px)}
+.pbar{height:8px;border-radius:4px;background:var(--card2);overflow:hidden;margin-top:10px}
+.pbar i{display:block;height:100%;border-radius:4px;background:var(--m);transition:width .3s}
 
 /* ---------- tabbar ---------- */
-nav{position:fixed;left:18px;right:18px;bottom:calc(var(--sab) + 12px);z-index:1000;
-  display:flex;background:rgba(255,255,255,.94);backdrop-filter:blur(16px);
-  -webkit-backdrop-filter:blur(16px);border-radius:26px;box-shadow:0 4px 30px -6px rgba(16,24,40,.22);
-  padding:8px}
-nav button{flex:1;background:none;border:none;color:var(--muted);font-family:inherit;
-  font-size:10.5px;font-weight:650;display:flex;flex-direction:column;align-items:center;
-  gap:4px;padding:7px 0;cursor:pointer;border-radius:18px}
+nav{position:fixed;left:0;right:0;bottom:0;z-index:1000;
+  display:flex;background:rgba(10,10,10,.94);backdrop-filter:blur(14px);
+  -webkit-backdrop-filter:blur(14px);border-top:1px solid var(--line);
+  padding:7px 10px calc(var(--sab) + 7px)}
+nav button{flex:1;background:none;border:none;color:var(--dim);font-family:inherit;
+  font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;
+  display:flex;flex-direction:column;align-items:center;gap:4px;padding:6px 0;cursor:pointer;border-radius:6px}
 nav button svg{width:21px;height:21px}
-nav button.sel{color:var(--txt);background:var(--soft)}
+nav button.sel{color:var(--m)}
 #view-info{display:none}
 .hidden{display:none!important}
 </style>
@@ -170,6 +191,7 @@ nav button.sel{color:var(--txt);background:var(--soft)}
       </div>
       <div class="clockpill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><span id="h-clock">--:--</span></div>
     </div>
+    <div class="stripes"><i style="background:var(--m)"></i><i style="background:var(--p)"></i><i style="background:var(--s)"></i></div>
     <div class="daystrip" id="daystrip"></div>
   </header>
 
@@ -189,11 +211,12 @@ nav button.sel{color:var(--txt);background:var(--soft)}
         <div class="trow"><span class="l">Partenza JFK</span><span class="r">Dom 30 Ago · 22:00</span></div>
         <div class="trow"><span class="l">Uscita per JFK</span><span class="r">Dom 30 Ago · entro 18:00</span></div>
       </div>
-      <div class="info-card">
-        <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9V7a2 2 0 012-2h14a2 2 0 012 2v2a3 3 0 000 6v2a2 2 0 01-2 2H5a2 2 0 01-2-2v-2a3 3 0 000-6z"/><path d="M13 5v2M13 11v2M13 17v2"/></svg>Biglietti già acquistati</h3>
+      <div class="info-card ticket">
+        <div class="th"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9V7a2 2 0 012-2h14a2 2 0 012 2v2a3 3 0 000 6v2a2 2 0 01-2 2H5a2 2 0 01-2-2v-2a3 3 0 000-6z"/><path d="M13 5v2M13 11v2M13 17v2"/></svg>Biglietti già acquistati</div>
         <div class="tk"><span class="em"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 3v10"/><path d="M8 21h8M12 17v4"/><rect x="8" y="3" width="8" height="7" rx="4"/></svg></span><div><div class="tt">Bruno Mars — MetLife Stadium</div><small>Mar 25 Ago · ore 19:00</small></div></div>
         <div class="tk"><span class="em"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 21c0-4 3-7 8-7s8 3 8 7"/><path d="M12 3l1.2 2.6L16 6l-2 2 .5 3L12 9.6 9.5 11l.5-3-2-2 2.8-.4z"/></svg></span><div><div class="tt">Ferry Liberty + Ellis Island</div><small>Gio 27 Ago · ore 09:00</small></div></div>
         <div class="tk"><span class="em"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M7 5c2 2.5 2 11.5 0 14M17 5c-2 2.5-2 11.5 0 14"/></svg></span><div><div class="tt">Yankees vs Red Sox — Yankee Stadium</div><small>Ven 28 Ago · ore 19:00</small></div></div>
+        <div class="barcode"></div>
       </div>
       <div class="info-card">
         <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 18a5 5 0 00-10 0"/><path d="M12 9V3M4.2 10.2l1.4 1.4M1 18h2M21 18h2M18.4 11.6l1.4-1.4"/><path d="M3 22h18"/></svg>Golden hour &amp; tramonto</h3>
@@ -353,7 +376,7 @@ const DAYS=[
  s:[A("Partenza per JFK — volo 22:00",40.6413,-73.7781,{q:"JFK Airport",ic:"plane",w:"https://www.jfkairport.com"})]}
 ];
 const PERIODS=[["m","Mattina"],["p","Pomeriggio"],["s","Sera"]];
-const PCOL={m:"#F5A623",p:"#5B8DEF",s:"#8B7CF6"};
+const PCOL={m:"#FCCC0A",p:"#FF6319",s:"#EE352E"};const PTXT={m:"#0A0A0A",p:"#fff",s:"#fff"};
 
 /* ================= STATE ================= */
 let sel=null, tab="day", map=null, mapLayer=null;
@@ -431,14 +454,14 @@ function renderDay(){
     const isLive=st==="today"&&curP===p;
     const pastP=st==="past"||(st==="today"&&["m","p","s"].indexOf(p)<["m","p","s"].indexOf(curP));
     html+=`<div class="period ${(pastP&&!isLive)||allDone?"done-p":""}">
-      <div class="p-head"><span class="pdot" style="background:${PCOL[p]}"></span><span class="nm">${label}</span>
+      <div class="p-head"><span class="pdot ${p}">${label[0]}</span><span class="nm">${label}</span>
       ${isLive?'<span class="live-tag">In corso</span>':""}</div><div class="acts">`;
     list.forEach((a,i)=>{
       const k=key(day.id,p,i), done=!!checks[k];
       const isNext=nextK===p+i;
       const org=prev; if(!a.free)prev=a;
       html+=`<div class="act ${done?"done":""}">
-        <div class="ck" style="--ic:${PCOL[p]};--icbg:${PCOL[p]}1a" onclick="toggle('${k}')"><span class="pic">${ILL[a.ic]||ILL.city}</span><span class="chk">${I.check}</span></div>
+        <div class="ck ${p}" onclick="toggle('${k}')"><span class="pic">${ILL[a.ic]||ILL.city}</span><span class="chk">${I.check}</span></div>
         <div class="body" onclick="toggle('${k}')">
           <div class="t">${a.w?`<a href="${a.w}" target="_blank" rel="noopener" onclick="event.stopPropagation()">${esc(a.name)}${I.ext}</a>`:esc(a.name)}</div>
           ${(isNext&&!done)||a.time||a.note||a.ticket?`<div class="sub">
@@ -464,7 +487,7 @@ function renderMap(){
   const day=DAYS.find(d=>d.id===sel); if(!day)return;
   if(!map){
     map=L.map("map",{zoomControl:false});
-    L.tileLayer("https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
+    L.tileLayer("https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png",
       {attribution:"© OpenStreetMap © CARTO",maxZoom:19}).addTo(map);
     L.control.zoom({position:"bottomright"}).addTo(map);
     mapLayer=L.layerGroup().addTo(map);
@@ -477,14 +500,14 @@ function renderMap(){
       const org=prev; prev=a;
       n++;pts.push([a.lat,a.lng]);
       const ic=L.divIcon({className:"numpin",iconSize:[26,26],iconAnchor:[13,13],
-        html:`<div style="background:${PCOL[p]}">${n}</div>`});
+        html:`<div style="background:${PCOL[p]};color:${PTXT[p]}">${n}</div>`});
       L.marker([a.lat,a.lng],{icon:ic}).addTo(mapLayer)
         .bindPopup(`<div class="pop-t">${n}. ${esc(a.name)}</div><a class="pop-a" href="${gnav(a,org,day.walk)}" target="_blank" rel="noopener">${I.nav} Naviga con Google Maps</a>`);
     });
   }
   if(pts.length>1)L.polyline(pts,{color:"#9aa0ab",weight:2,dashArray:"4 7",opacity:.8}).addTo(mapLayer);
   const hic=L.divIcon({className:"numpin",iconSize:[26,26],iconAnchor:[13,13],
-    html:`<div style="background:#111318">${I.hotel}</div>`});
+    html:`<div style="background:#F2EFE6;color:#0A0A0A">${I.hotel}</div>`});
   L.marker([HOTEL.lat,HOTEL.lng],{icon:hic}).addTo(mapLayer)
     .bindPopup(`<div class="pop-t">${HOTEL.name}</div><a class="pop-a" href="${gnav({q:'NH Madison Hotel New York'})}" target="_blank" rel="noopener">${I.nav} Naviga</a>`);
   if(pts.length)map.fitBounds(L.latLngBounds(pts).pad(0.25));
