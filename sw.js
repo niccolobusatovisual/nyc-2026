@@ -1,4 +1,4 @@
-const CACHE = "nyc-v5";
+const CACHE = "nyc-v6";
 const ASSETS = [
   "./",
   "./index.html",
@@ -6,6 +6,7 @@ const ASSETS = [
   "./icon-192.png",
   "./icon-512.png",
   "./icon-180.png",
+  "./couple.jpg",
   "https://unpkg.com/leaflet@1.9.4/dist/leaflet.css",
   "https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
 ];
