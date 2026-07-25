@@ -133,9 +133,20 @@ main{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:14px 18px c
 .pop-a{display:inline-flex;align-items:center;gap:5px;font-size:12px;color:var(--m);text-decoration:none;font-weight:700}
 .pop-a svg{width:12px;height:12px}
 .numpin{background:none;border:none}
-.numpin div{width:26px;height:26px;border-radius:13px;display:grid;place-items:center;
+.numpin .pinwrap{display:flex;align-items:center;gap:0;white-space:nowrap}
+.numpin .bull{flex:none;width:26px;height:26px;border-radius:13px;display:grid;place-items:center;
   font-weight:800;font-size:12px;border:2px solid #0A0A0A;box-shadow:0 2px 8px rgba(0,0,0,.6)}
-.numpin div svg{width:13px;height:13px}
+.numpin .bull svg{width:13px;height:13px}
+.numpin .plab{margin-left:4px;background:rgba(10,10,10,.88);color:#F2EFE6;
+  font:700 10.5px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;letter-spacing:.2px;
+  padding:4px 7px;border-radius:4px;border:1px solid rgba(242,239,230,.18);
+  max-width:132px;overflow:hidden;text-overflow:ellipsis;box-shadow:0 2px 8px rgba(0,0,0,.5)}
+.maplabels-off .numpin .plab{display:none}
+.lbl-toggle{position:absolute;top:12px;right:12px;z-index:800;
+  background:rgba(10,10,10,.9);color:var(--txt);border:1px solid var(--line);border-radius:6px;
+  padding:8px 11px;font:700 10.5px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;
+  letter-spacing:1px;text-transform:uppercase;cursor:pointer}
+.lbl-toggle.off{color:var(--dim)}
 
 /* ---------- info ---------- */
 .hero{border-radius:8px;overflow:hidden;margin-bottom:12px;border:1px solid var(--line);background:var(--card)}
@@ -241,7 +252,10 @@ nav button.sel{color:var(--m)}
   </main>
 
   <div id="view-map">
-    <div id="map"></div>
+    <div style="position:relative;flex:1;min-height:0;display:flex">
+      <div id="map"></div>
+      <button class="lbl-toggle" id="lbl-toggle" onclick="toggleLabels()">Nomi ON</button>
+    </div>
     <div class="map-legend">
       <span><i style="background:var(--m)"></i>Mattina</span>
       <span><i style="background:var(--p)"></i>Pomeriggio</span>
@@ -297,6 +311,7 @@ ball:S+'<circle cx="12" cy="12" r="8.5"/><path d="M6 6c1.8 1.5 3 3.6 3 6s-1.2 4.
 case:S+'<rect x="4" y="8" width="16" height="12" rx="2"/><path d="M9 8V5a2 2 0 012-2h2a2 2 0 012 2v3"/><path d="M9 12.5v3M15 12.5v3"/></svg>',
 moon:S+'<path d="M20 13A8 8 0 1111 4a6.5 6.5 0 009 9z"/></svg>',
 coffee:S+'<path d="M4 9h12v6a5 5 0 01-5 5h-2a5 5 0 01-5-5V9z"/><path d="M16 10h2a2.5 2.5 0 010 5h-2"/><path d="M7 5.5V4M10 5.5V4M13 5.5V4"/></svg>',
+walk2:S+'<circle cx="13" cy="4.5" r="1.8"/><path d="M12.5 8.5L10 12l1.5 3.5L10 21"/><path d="M12.5 8.5l3 2 2.5.5M12.5 8.5L9.5 8 7 10.5"/><path d="M11.5 15.5L14 17l1 4"/></svg>',
 arch:S+'<path d="M4 21V6a2 2 0 012-2h12a2 2 0 012 2v15"/><path d="M8 21v-8a4 4 0 018 0v8"/><path d="M2 21h20"/></svg>',
 flag:S+'<path d="M5 21V4"/><path d="M5 5h13l-2.5 3.5L18 12H5"/></svg>'
 };
@@ -312,15 +327,16 @@ const DAYS=[
  s:[A("Cena — Bubba Gump Shrimp Co.",40.7566,-73.9863,{q:"Bubba Gump Shrimp Co Times Square",ic:"food",w:"https://www.bubbagump.com"}),
     A("Times Square",40.7580,-73.9855,{ic:"city",w:"https://it.wikipedia.org/wiki/Times_Square"})]},
 {id:"2026-08-22",dow:"Sab",date:"22 Ago",title:"Sabato 22",area:"Midtown",golden:"18:38",sunset:"19:38",walk:true,
- m:[A("New York Public Library",40.7531,-73.9822,{note:"apre 10:00",ic:"book",w:"https://it.wikipedia.org/wiki/New_York_Public_Library"}),
+ m:[A("5ª Avenue verso nord",40.7550,-73.9800,{q:"5th Avenue and 47th St New York",ic:"city",w:"https://it.wikipedia.org/wiki/Fifth_Avenue"}),
+    A("St. Patrick's Cathedral",40.7585,-73.9760,{note:"50th St",ic:"church",w:"https://it.wikipedia.org/wiki/Cattedrale_di_San_Patrizio_(New_York)"}),
+    A("Grand Army Plaza — Central Park",40.7645,-73.9740,{note:"59th St",q:"Grand Army Plaza Manhattan",ic:"park",w:"https://en.wikipedia.org/wiki/Grand_Army_Plaza_(Manhattan)"}),
+    A("Passeggiata bordo sud Central Park",40.7660,-73.9773,{q:"Central Park South New York",ic:"walk2",w:"https://it.wikipedia.org/wiki/Central_Park"}),
+    A("Columbus Circle",40.7681,-73.9819,{note:"59th & Broadway",ic:"city",w:"https://en.wikipedia.org/wiki/Columbus_Circle"})],
+ p:[A("Broadway verso sud",40.7614,-73.9840,{q:"Broadway and 53rd St New York",ic:"city",w:"https://it.wikipedia.org/wiki/Broadway"}),
+    A("Hard Rock Cafe (pranzo)",40.7570,-73.9866,{note:"44th St",q:"Hard Rock Cafe New York Times Square",ic:"food",w:"https://www.hardrockcafe.com/location/new-york/"}),
+    A("New York Public Library",40.7531,-73.9822,{note:"42nd St",ic:"book",w:"https://it.wikipedia.org/wiki/New_York_Public_Library"}),
     A("Bryant Park",40.7536,-73.9832,{ic:"park",w:"https://it.wikipedia.org/wiki/Bryant_Park"}),
-    A("Grand Central Terminal",40.7527,-73.9772,{ic:"train",w:"https://it.wikipedia.org/wiki/Grand_Central_Terminal"}),
-    A("Summit One Vanderbilt",40.7527,-73.9787,{ic:"tower",w:"https://summitov.com"}),
-    A("Hard Rock Cafe (pranzo)",40.7570,-73.9866,{q:"Hard Rock Cafe New York Times Square",ic:"food",w:"https://www.hardrockcafe.com/location/new-york/"})],
- p:[A("5ª Avenue",40.7539,-73.9810,{q:"5th Avenue and 42nd St New York",ic:"city",w:"https://it.wikipedia.org/wiki/Fifth_Avenue"}),
-    A("St. Patrick's Cathedral",40.7585,-73.9760,{ic:"church",w:"https://it.wikipedia.org/wiki/Cattedrale_di_San_Patrizio_(New_York)"}),
-    A("Lego Store — Rockefeller Center",40.7587,-73.9787,{ic:"lego",w:"https://www.lego.com/en-us/stores/store/rockefeller-center"}),
-    A("Pausa / tempo libero",40.7587,-73.9787,{free:true,ic:"coffee"})],
+    A("Lego Store — Rockefeller Center",40.7587,-73.9787,{ic:"lego",w:"https://www.lego.com/en-us/stores/store/rockefeller-center"})],
  s:[A("Top of the Rock",40.7591,-73.9794,{time:"salita 18:30",note:"tramonto 19:38",ic:"tower",w:"https://www.rockefellercenter.com/attractions/top-of-the-rock-observation-deck/"}),
     A("Keens Steakhouse",40.7505,-73.9862,{time:"20:30",ic:"food",w:"https://www.keens.com"})]},
 {id:"2026-08-23",dow:"Dom",date:"23 Ago",title:"Domenica 23",area:"Upper East Side → Midtown (sera)",golden:"18:36",sunset:"19:36",walk:true,
@@ -359,8 +375,10 @@ const DAYS=[
  p:[A("Wall Street",40.7069,-74.0113,{ic:"city",w:"https://it.wikipedia.org/wiki/Wall_Street"}),
     A("Charging Bull",40.7056,-74.0134,{ic:"city",w:"https://it.wikipedia.org/wiki/Charging_Bull"}),
     A("NY Supreme Court — Foley Square",40.7143,-74.0018,{q:"New York County Supreme Court",ic:"museum",w:"https://en.wikipedia.org/wiki/New_York_County_Courthouse"}),
-    A("Chinatown (passeggiata)",40.7158,-73.9970,{q:"Chinatown Manhattan",ic:"city",w:"https://it.wikipedia.org/wiki/Chinatown_(Manhattan)"}),
-    A("Chrysler Building",40.7516,-73.9755,{ic:"tower",w:"https://it.wikipedia.org/wiki/Chrysler_Building"})],
+    A("Chinatown (spuntino leggero)",40.7158,-73.9970,{q:"Chinatown Manhattan",ic:"food",w:"https://it.wikipedia.org/wiki/Chinatown_(Manhattan)"}),
+    A("Chrysler Building",40.7516,-73.9755,{ic:"tower",w:"https://it.wikipedia.org/wiki/Chrysler_Building"}),
+    A("Summit One Vanderbilt",40.7527,-73.9787,{ic:"tower",w:"https://summitov.com"}),
+    A("Grand Central Terminal",40.7527,-73.9772,{ic:"train",w:"https://it.wikipedia.org/wiki/Grand_Central_Terminal"})],
  s:[A("Grand Central Oyster Bar",40.7527,-73.9772,{time:"19:00",note:"chiude 21:30",ic:"food",w:"https://www.oysterbarny.com"})]},
 {id:"2026-08-28",dow:"Ven",date:"28 Ago",title:"Venerdì 28",area:"Lower Manhattan → LES → Gramercy → Midtown → Bronx (sera)",golden:"18:29",sunset:"19:29",walk:false,
  m:[A("Governors Island",40.6895,-74.0168,{ic:"park",w:"https://en.wikipedia.org/wiki/Governors_Island"}),
@@ -492,6 +510,15 @@ function renderDay(){
   document.getElementById("view-day").innerHTML=html;
 }
 
+let labelsOn=localStorage.getItem("nyc-labels")!=="0";
+window.toggleLabels=()=>{
+  labelsOn=!labelsOn;localStorage.setItem("nyc-labels",labelsOn?"1":"0");applyLabels();
+};
+function applyLabels(){
+  const m=document.getElementById("map"),b=document.getElementById("lbl-toggle");
+  if(m)m.classList.toggle("maplabels-off",!labelsOn);
+  if(b){b.textContent=labelsOn?"Nomi ON":"Nomi OFF";b.classList.toggle("off",!labelsOn);}
+}
 window.toggle=k=>{checks[k]?delete checks[k]:checks[k]=1;saveChecks();renderDay();renderInfo();};
 window.selectDay=id=>{sel=id;renderStrip();renderDay();if(tab==="map")renderMap();};
 
@@ -513,18 +540,19 @@ function renderMap(){
       const org=prev; prev=a;
       n++;pts.push([a.lat,a.lng]);
       const ic=L.divIcon({className:"numpin",iconSize:[26,26],iconAnchor:[13,13],
-        html:`<div style="background:${PCOL[p]};color:${PTXT[p]}">${n}</div>`});
+        html:`<div class="pinwrap"><span class="bull" style="background:${PCOL[p]};color:${PTXT[p]}">${n}</span><span class="plab">${esc(a.name)}</span></div>`});
       L.marker([a.lat,a.lng],{icon:ic}).addTo(mapLayer)
         .bindPopup(`<div class="pop-t">${n}. ${esc(a.name)}</div><a class="pop-a" href="${gnav(a,org,day.walk)}" target="_blank" rel="noopener">${I.nav} Naviga con Google Maps</a>`);
     });
   }
   if(pts.length>1)L.polyline(pts,{color:"#9aa0ab",weight:2,dashArray:"4 7",opacity:.8}).addTo(mapLayer);
   const hic=L.divIcon({className:"numpin",iconSize:[26,26],iconAnchor:[13,13],
-    html:`<div style="background:#F2EFE6;color:#0A0A0A">${I.hotel}</div>`});
+    html:`<div class="pinwrap"><span class="bull" style="background:#F2EFE6;color:#0A0A0A">${I.hotel}</span><span class="plab">Hotel</span></div>`});
   L.marker([HOTEL.lat,HOTEL.lng],{icon:hic}).addTo(mapLayer)
     .bindPopup(`<div class="pop-t">${HOTEL.name}</div><a class="pop-a" href="${gnav({q:'NH Madison Hotel New York'})}" target="_blank" rel="noopener">${I.nav} Naviga</a>`);
   if(pts.length)map.fitBounds(L.latLngBounds(pts).pad(0.25));
   else map.setView([HOTEL.lat,HOTEL.lng],13);
+  applyLabels();
   setTimeout(()=>map.invalidateSize(),60);
 }
 
