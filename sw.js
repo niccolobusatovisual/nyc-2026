@@ -1,4 +1,4 @@
-const CACHE = "nyc-v11";
+const CACHE = "nyc-v12";
 const ASSETS = [
   "./",
   "./index.html",
@@ -27,8 +27,6 @@ self.addEventListener("activate", e => {
   );
 });
 
-// Cache-first per app shell e Leaflet; network-first con fallback cache per il resto.
-// Le tile della mappa vengono cachate man mano che le vedi (stale-while-revalidate).
 self.addEventListener("fetch", e => {
   const url = e.request.url;
   if (e.request.method !== "GET") return;
