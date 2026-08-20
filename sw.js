@@ -1,4 +1,4 @@
-const CACHE = "nyc-v13";
+const CACHE = "nyc-v14";
 const ASSETS = [
   "./",
   "./index.html",
@@ -30,6 +30,7 @@ self.addEventListener("activate", e => {
 self.addEventListener("fetch", e => {
   const url = e.request.url;
   if (e.request.method !== "GET") return;
+  if (url.includes("api.github.com")) return;
 
   if (url.includes("basemaps.cartocdn.com")) {
     e.respondWith(
