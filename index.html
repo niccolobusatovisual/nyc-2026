@@ -90,6 +90,10 @@ main{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:14px 18px c
 .p-head .pdot.s{background:var(--s);color:#fff}
 .p-head .pdot svg{width:13px;height:13px}
 .p-head .nm{font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:2px;color:var(--txt)}
+.p-head .wx{margin-left:auto;display:flex;align-items:center;gap:5px;font-size:11px;font-weight:700;
+  color:var(--muted);background:var(--card2);border:1px solid var(--line);border-radius:99px;padding:4px 10px}
+.p-head .wx svg{width:13px;height:13px;color:var(--m)}
+.p-head .wx + .live-tag{margin-left:7px}
 .p-head .live-tag{margin-left:auto;font-size:10px;font-weight:800;letter-spacing:1.5px;
   color:#fff;background:var(--ok);border-radius:4px;padding:4px 9px;text-transform:uppercase}
 .acts{display:flex;flex-direction:column;gap:7px}
@@ -189,6 +193,8 @@ main{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:14px 18px c
 .tk small{display:block;color:#6b675c;font-size:12px;font-weight:500;margin-top:1px}
 .barcode{height:34px;margin:12px 16px 16px;
   background:repeating-linear-gradient(90deg,#0A0A0A 0 2px,transparent 2px 5px,#0A0A0A 5px 6px,transparent 6px 9px,#0A0A0A 9px 12px,transparent 12px 14px)}
+.wxwarn{background:rgba(252,204,10,.12);border:1px solid rgba(252,204,10,.35);border-radius:6px;
+  padding:10px 12px;font-size:13px;font-weight:600;color:var(--m);line-height:1.45}
 .pbar{height:8px;border-radius:4px;background:var(--card2);overflow:hidden;margin-top:10px}
 .pbar i{display:block;height:100%;border-radius:4px;background:var(--m);transition:width .3s}
 
@@ -246,6 +252,11 @@ nav button.sel{color:var(--m)}
         <div class="tk"><span class="em"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 21c0-4 3-7 8-7s8 3 8 7"/><path d="M12 3l1.2 2.6L16 6l-2 2 .5 3L12 9.6 9.5 11l.5-3-2-2 2.8-.4z"/></svg></span><div><div class="tt">Ferry Liberty + Ellis Island</div><small>Gio 27 Ago · ore 09:00</small></div></div>
         <div class="tk"><span class="em"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M7 5c2 2.5 2 11.5 0 14M17 5c-2 2.5-2 11.5 0 14"/></svg></span><div><div class="tt">Yankees vs Red Sox — Yankee Stadium</div><small>Ven 28 Ago · ore 19:00</small></div></div>
         <div class="barcode"></div>
+      </div>
+      <div class="info-card">
+        <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2M5.2 5.2l1.4 1.4M17.4 17.4l1.4 1.4M18.8 5.2l-1.4 1.4M6.6 17.4l-1.4 1.4"/></svg>Meteo</h3>
+        <div class="wxwarn">Sabato 22: 50% di probabilità di pioggia tutto il giorno — controllate le previsioni prima delle attività all'aperto.</div>
+        <p>Fonte: weather.gov (21–25 ago, agg. 19/08 05:30 EDT) · AccuWeather per i giorni con asterisco * (26–30 ago), previsioni a lungo termine meno affidabili.</p>
       </div>
       <div class="info-card">
         <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 18a5 5 0 00-10 0"/><path d="M12 9V3M4.2 10.2l1.4 1.4M1 18h2M21 18h2M18.4 11.6l1.4-1.4"/><path d="M3 22h18"/></svg>Golden hour &amp; tramonto</h3>
@@ -320,6 +331,10 @@ torch:S+'<path d="M12 10a3.5 3.5 0 003.5-3.5C15.5 4 12 2 12 2S8.5 4 8.5 6.5A3.5 
 ball:S+'<circle cx="12" cy="12" r="8.5"/><path d="M6 6c1.8 1.5 3 3.6 3 6s-1.2 4.5-3 6M18 6c-1.8 1.5-3 3.6-3 6s1.2 4.5 3 6"/></svg>',
 case:S+'<rect x="4" y="8" width="16" height="12" rx="2"/><path d="M9 8V5a2 2 0 012-2h2a2 2 0 012 2v3"/><path d="M9 12.5v3M15 12.5v3"/></svg>',
 moon:S+'<path d="M20 13A8 8 0 1111 4a6.5 6.5 0 009 9z"/></svg>',
+sun:S+'<circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2M5.2 5.2l1.4 1.4M17.4 17.4l1.4 1.4M18.8 5.2l-1.4 1.4M6.6 17.4l-1.4 1.4"/></svg>',
+cloudsun:S+'<circle cx="8" cy="8" r="2.8"/><path d="M8 2.6v1.6M2.6 8h1.6M4.4 4.4l1.1 1.1M11.6 4.4l-1.1 1.1"/><path d="M9 18a3.6 3.6 0 01.6-7.1 5 5 0 019.5 1.6A3 3 0 0118.5 18H9z"/></svg>',
+rain:S+'<path d="M8 15a3.8 3.8 0 01.6-7.5 5.2 5.2 0 019.9 1.7A3.1 3.1 0 0117.8 15H8z"/><path d="M8.5 18.5l-1 2.5M13 18.5l-1 2.5M17.5 18.5l-1 2.5"/></svg>',
+showers:S+'<path d="M8 15a3.8 3.8 0 01.6-7.5 5.2 5.2 0 019.9 1.7A3.1 3.1 0 0117.8 15H8z"/><path d="M10 18.5l-.8 2M15 18.5l-.8 2"/></svg>',
 coffee:S+'<path d="M4 9h12v6a5 5 0 01-5 5h-2a5 5 0 01-5-5V9z"/><path d="M16 10h2a2.5 2.5 0 010 5h-2"/><path d="M7 5.5V4M10 5.5V4M13 5.5V4"/></svg>',
 walk2:S+'<circle cx="13" cy="4.5" r="1.8"/><path d="M12.5 8.5L10 12l1.5 3.5L10 21"/><path d="M12.5 8.5l3 2 2.5.5M12.5 8.5L9.5 8 7 10.5"/><path d="M11.5 15.5L14 17l1 4"/></svg>',
 arch:S+'<path d="M4 21V6a2 2 0 012-2h12a2 2 0 012 2v15"/><path d="M8 21v-8a4 4 0 018 0v8"/><path d="M2 21h20"/></svg>',
@@ -330,7 +345,7 @@ flag:S+'<path d="M5 21V4"/><path d="M5 5h13l-2.5 3.5L18 12H5"/></svg>'
 const HOTEL={name:"NH Madison Hotel",lat:40.7497,lng:-73.9827};
 const A=(name,lat,lng,o={})=>({name,lat,lng,...o});
 const DAYS=[
-{id:"2026-08-21",dow:"Ven",date:"21 Ago",title:"Venerdì 21",area:"Midtown · Arrivo",golden:null,sunset:null,walk:false,
+{id:"2026-08-21",dow:"Ven",date:"21 Ago",title:"Venerdì 21",area:"Midtown · Arrivo",golden:null,sunset:null,walk:false,wm:["plane","In volo"],wp:["sun","27°C"],ws:["cloudsun","22°C"],
  m:[],
  l:[A("Pranzo da decidere",HOTEL.lat,HOTEL.lng,{free:true,ic:"food"})],
  p:[A("Arrivo a JFK",40.6413,-73.7781,{time:"17:00",note:"dogana all'arrivo",ic:"plane",w:"https://it.wikipedia.org/wiki/Aeroporto_Internazionale_John_F._Kennedy"}),
@@ -338,7 +353,7 @@ const DAYS=[
  d:[A("Bubba Gump Shrimp Co.",40.7566,-73.9863,{time:"20:30",book:true,q:"Bubba Gump Shrimp Co Times Square",ic:"food",w:"https://www.bubbagump.com"})],
  s:[A("Times Square",40.7580,-73.9855,{ic:"city",w:"https://it.wikipedia.org/wiki/Times_Square"})]},
 
-{id:"2026-08-22",dow:"Sab",date:"22 Ago",title:"Sabato 22",area:"Midtown",golden:"18:38",sunset:"19:38",walk:true,
+{id:"2026-08-22",dow:"Sab",date:"22 Ago",title:"Sabato 22",area:"Midtown",golden:"18:38",sunset:"19:38",walk:true,wm:["rain","26°C · 50%"],wp:["rain","26°C · 50%"],ws:["rain","22°C · 50%"],
  m:[A("5ª Avenue verso nord",40.7550,-73.9800,{q:"5th Avenue and 47th St New York",ic:"city",w:"https://it.wikipedia.org/wiki/Fifth_Avenue"}),
     A("St. Patrick's Cathedral",40.7585,-73.9760,{note:"50th St",ic:"church",w:"https://it.wikipedia.org/wiki/Cattedrale_di_San_Patrizio_(New_York)"}),
     A("Grand Army Plaza — Central Park",40.7645,-73.9740,{note:"59th St",q:"Grand Army Plaza Manhattan",ic:"park",w:"https://en.wikipedia.org/wiki/Grand_Army_Plaza_(Manhattan)"}),
@@ -347,51 +362,52 @@ const DAYS=[
  l:[A("Hard Rock Cafe",40.7570,-73.9866,{time:"13:00",book:true,note:"44th St",q:"Hard Rock Cafe New York Times Square",ic:"food",w:"https://www.hardrockcafe.com/location/new-york/"})],
  p:[A("New York Public Library",40.7531,-73.9822,{note:"42nd St",ic:"book",w:"https://it.wikipedia.org/wiki/New_York_Public_Library"}),
     A("Bryant Park",40.7536,-73.9832,{ic:"park",w:"https://it.wikipedia.org/wiki/Bryant_Park"}),
-    A("Lego Store — Rockefeller Center",40.7587,-73.9787,{ic:"lego",w:"https://www.lego.com/en-us/stores/store/rockefeller-center"}),
-    A("Top of the Rock",40.7591,-73.9794,{time:"18:00",book:true,gc:true,note:"tramonto 19:38",ic:"tower",w:"https://www.rockefellercenter.com/attractions/top-of-the-rock-observation-deck/"})],
- d:[A("Keens Steakhouse",40.7505,-73.9862,{time:"20:30",ic:"food",w:"https://www.keens.com"})],
+    A("Lego Store — Rockefeller Center",40.7587,-73.9787,{ic:"lego",w:"https://www.lego.com/en-us/stores/store/rockefeller-center"})],
+ d:[A("Korean BBQ — Koreatown",40.7478,-73.9866,{note:"da confermare",q:"Korean BBQ Koreatown New York",ic:"food",w:"https://www.google.com/search?q=korean+bbq+koreatown+nyc"})],
  s:[A("Serata libera",HOTEL.lat,HOTEL.lng,{free:true,ic:"moon"})]},
 
-{id:"2026-08-23",dow:"Dom",date:"23 Ago",title:"Domenica 23",area:"Upper East Side → Midtown",golden:"18:36",sunset:"19:36",walk:true,
+{id:"2026-08-23",dow:"Dom",date:"23 Ago",title:"Domenica 23",area:"Upper East Side → Midtown",golden:"18:36",sunset:"19:36",walk:true,wm:["cloudsun","25°C"],wp:["showers","28°C · 40%"],ws:["showers","22°C · 30%"],
  m:[A("Central Park",40.7690,-73.9760,{ic:"park",w:"https://it.wikipedia.org/wiki/Central_Park"})],
  l:[A("Pranzo da decidere",40.7690,-73.9760,{free:true,ic:"food"})],
  p:[A("Guggenheim (foto esterna)",40.7830,-73.9590,{q:"Solomon R. Guggenheim Museum",ic:"museum",w:"https://it.wikipedia.org/wiki/Solomon_R._Guggenheim_Museum"}),
-    A("The Met",40.7794,-73.9632,{book:true,note:"apre 10:00",q:"The Metropolitan Museum of Art",ic:"museum",w:"https://it.wikipedia.org/wiki/Metropolitan_Museum_of_Art"}),
-    A("Roosevelt Island Tramway",40.7614,-73.9642,{note:"andata e ritorno",ic:"train",w:"https://en.wikipedia.org/wiki/Roosevelt_Island_Tramway"})],
+    A("The Met",40.7794,-73.9632,{book:true,note:"apre 10:00",q:"The Metropolitan Museum of Art",ic:"museum",w:"https://it.wikipedia.org/wiki/Metropolitan_Museum_of_Art"})],
  d:[A("Mermaid Oyster Bar",40.7562,-73.9846,{note:"post-spettacolo",q:"Mermaid Oyster Bar Times Square",ic:"food",w:"https://themermaidnyc.com"})],
  s:[A("Musical a Broadway",40.7590,-73.9845,{time:"19:00",note:"spettacolo TBD",q:"Broadway Theater District New York",ic:"music",w:"https://it.wikipedia.org/wiki/Broadway"})]},
 
-{id:"2026-08-24",dow:"Lun",date:"24 Ago",title:"Lunedì 24",area:"Manhattan → Brooklyn",golden:"18:35",sunset:"19:35",walk:false,
+{id:"2026-08-24",dow:"Lun",date:"24 Ago",title:"Lunedì 24",area:"Manhattan → Brooklyn → Midtown",golden:"18:35",sunset:"19:35",walk:false,wm:["sun","23°C"],wp:["sun","28°C"],ws:["moon","21°C"],
  m:[A("Brooklyn Bridge (Manhattan→Brooklyn)",40.7061,-73.9969,{q:"Brooklyn Bridge pedestrian entrance",ic:"bridge",w:"https://it.wikipedia.org/wiki/Ponte_di_Brooklyn"}),
     A("DUMBO",40.7033,-73.9881,{q:"DUMBO Brooklyn",ic:"city",w:"https://it.wikipedia.org/wiki/Dumbo_(Brooklyn)"}),
     A("Squibb Park Bridge",40.7008,-73.9967,{ic:"bridge",w:"https://en.wikipedia.org/wiki/Squibb_Park_Bridge"}),
     A("Brooklyn Heights Promenade",40.6968,-73.9973,{ic:"park",w:"https://en.wikipedia.org/wiki/Brooklyn_Heights_Promenade"})],
  l:[A("Pranzo da decidere",40.6968,-73.9973,{free:true,ic:"food"})],
  p:[A("Coney Island",40.5749,-73.9850,{ic:"wheel",w:"https://it.wikipedia.org/wiki/Coney_Island"}),
-    A("Nathan's Famous",40.5754,-73.9814,{q:"Nathan's Famous Coney Island",ic:"food",w:"https://www.nathansfamous.com"})],
- d:[A("Peter Luger Steak House",40.7099,-73.9622,{note:"Williamsburg",q:"Peter Luger Steak House Brooklyn",ic:"food",w:"https://peterluger.com"})],
+    A("Nathan's Famous",40.5754,-73.9814,{q:"Nathan's Famous Coney Island",ic:"food",w:"https://www.nathansfamous.com"}),
+    A("Rientro a Midtown",40.7591,-73.9794,{q:"Rockefeller Center New York",ic:"train"}),
+    A("Top of the Rock",40.7591,-73.9794,{time:"18:00",book:true,gc:true,note:"tramonto 19:38",ic:"tower",w:"https://www.rockefellercenter.com/attractions/top-of-the-rock-observation-deck/"})],
+ d:[A("Keens Steakhouse",40.7505,-73.9862,{time:"~20:00",ic:"food",w:"https://www.keens.com"})],
  s:[A("Serata libera",HOTEL.lat,HOTEL.lng,{free:true,ic:"moon"})]},
 
-{id:"2026-08-25",dow:"Mar",date:"25 Ago",title:"Martedì 25",area:"Lower Manhattan → LES → New Jersey (sera)",golden:"18:33",sunset:"19:33",walk:false,
+{id:"2026-08-25",dow:"Mar",date:"25 Ago",title:"Martedì 25",area:"Lower Manhattan → LES → Midtown Est → New Jersey (sera)",golden:"18:33",sunset:"19:33",walk:false,wm:["sun","24°C"],wp:["sun","28°C"],ws:["sun","22°C"],
  m:[A("9/11 Memorial & Museum",40.7115,-74.0134,{gc:true,note:"apre 09:00",ic:"museum",w:"https://www.911memorial.org"}),
     A("One World Observatory",40.7130,-74.0131,{gc:true,ic:"tower",w:"https://oneworldobservatory.com"}),
     A("The Oculus",40.7116,-74.0110,{q:"Oculus World Trade Center",ic:"city",w:"https://en.wikipedia.org/wiki/World_Trade_Center_station_(PATH)"})],
  l:[A("Katz's Delicatessen",40.7223,-73.9874,{q:"Katz's Delicatessen",ic:"food",w:"https://katzsdelicatessen.com"})],
- p:[A("Pomeriggio libero",HOTEL.lat,HOTEL.lng,{free:true,ic:"coffee"})],
+ p:[A("Roosevelt Island Tramway",40.7614,-73.9642,{note:"andata e ritorno",ic:"train",w:"https://en.wikipedia.org/wiki/Roosevelt_Island_Tramway"}),
+    A("Pomeriggio libero",HOTEL.lat,HOTEL.lng,{free:true,ic:"coffee"})],
  d:[A("Cena da decidere",40.8135,-74.0745,{free:true,ic:"food"})],
  s:[A("Bruno Mars — MetLife Stadium",40.8135,-74.0745,{time:"19:00",ticket:true,ic:"music",w:"https://www.metlifestadium.com"})]},
 
-{id:"2026-08-26",dow:"Mer",date:"26 Ago",title:"Mercoledì 26",area:"Upper West Side → Hell's Kitchen → Weehawken",golden:"18:32",sunset:"19:32",walk:false,
+{id:"2026-08-26",dow:"Mer",date:"26 Ago",title:"Mercoledì 26",area:"Upper West Side → Hell's Kitchen → Weehawken",golden:"18:32",sunset:"19:32",walk:false,wm:["cloudsun","24°C*"],wp:["sun","27°C*"],ws:["cloudsun","21°C*"],
  m:[A("Lincoln Center (visita esterna)",40.7725,-73.9835,{ic:"music",w:"https://www.lincolncenter.org"}),
     A("MoMA",40.7614,-73.9776,{gc:true,note:"apre 10:30",q:"Museum of Modern Art New York",ic:"museum",w:"https://www.moma.org"})],
  l:[A("Pranzo da decidere",40.7645,-73.9995,{free:true,ic:"food"})],
  p:[A("USS Intrepid — Pier 86",40.7645,-73.9995,{gc:true,q:"Intrepid Museum New York",ic:"boat",w:"https://intrepidmuseum.org"}),
     A("NYC Ferry: Pier 79 → Pier 11",40.7601,-74.0027,{note:"skyline nord→sud",q:"NYC Ferry Midtown West Pier 79",ic:"boat",w:"https://www.ferry.nyc"}),
     A("NY Waterway: Pier 11 → Weehawken",40.7013,-74.0132,{q:"NY Waterway Terminal Pier 11",ic:"boat",w:"https://www.nywaterway.com"})],
- d:[A("Molos Restaurant",40.7681,-74.0247,{note:"Weehawken",q:"Molos Restaurant Weehawken",ic:"food",w:"https://www.molosrestaurant.com"})],
+ d:[A("Molos Restaurant",40.7681,-74.0247,{time:"20:00",book:true,note:"Weehawken",q:"Molos Restaurant Weehawken",ic:"food",w:"https://www.molosrestaurant.com"})],
  s:[A("Hamilton Park (passeggiata post-cena)",40.7680,-74.0177,{q:"Hamilton Park Weehawken",ic:"park",w:"https://www.google.com/search?q=Hamilton+Park+Weehawken+skyline+view"})]},
 
-{id:"2026-08-27",dow:"Gio",date:"27 Ago",title:"Giovedì 27",area:"Lower Manhattan → Midtown East",golden:"18:30",sunset:"19:30",walk:false,
+{id:"2026-08-27",dow:"Gio",date:"27 Ago",title:"Giovedì 27",area:"Lower Manhattan → Midtown East",golden:"18:30",sunset:"19:30",walk:false,wm:["sun","25°C*"],wp:["sun","30°C*"],ws:["cloudsun","24°C*"],
  m:[A("Ferry da Battery Park",40.7013,-74.0158,{time:"09:00",ticket:true,q:"Statue City Cruises Battery Park",ic:"boat",w:"https://www.cityexperiences.com/new-york/city-cruises/statue/"}),
     A("Liberty Island",40.6892,-74.0445,{q:"Statue of Liberty",ic:"torch",w:"https://it.wikipedia.org/wiki/Statua_della_Libert%C3%A0"}),
     A("Ellis Island",40.6995,-74.0396,{ic:"museum",w:"https://it.wikipedia.org/wiki/Ellis_Island"})],
@@ -405,7 +421,7 @@ const DAYS=[
  d:[A("Grand Central Oyster Bar",40.7527,-73.9772,{time:"19:00",note:"chiude 21:30",ic:"food",w:"https://www.oysterbarny.com"})],
  s:[A("Serata libera",HOTEL.lat,HOTEL.lng,{free:true,ic:"moon"})]},
 
-{id:"2026-08-28",dow:"Ven",date:"28 Ago",title:"Venerdì 28",area:"Lower Manhattan → Gramercy → Midtown → The Bronx",golden:"18:29",sunset:"19:29",walk:false,
+{id:"2026-08-28",dow:"Ven",date:"28 Ago",title:"Venerdì 28",area:"Lower Manhattan → Gramercy → Midtown → The Bronx",golden:"18:29",sunset:"19:29",walk:false,wm:["cloudsun","22°C*"],wp:["sun","26°C*"],ws:["cloudsun","21°C*"],
  m:[A("Governors Island",40.6895,-74.0168,{ic:"park",w:"https://en.wikipedia.org/wiki/Governors_Island"})],
  l:[A("Pranzo da decidere",40.6895,-74.0168,{free:true,ic:"food"})],
  p:[A("Gramercy Park",40.7379,-73.9860,{ic:"park",w:"https://it.wikipedia.org/wiki/Gramercy_Park"}),
@@ -415,7 +431,7 @@ const DAYS=[
  d:[A("Cibo allo stadio",40.8296,-73.9262,{q:"Yankee Stadium",ic:"food",w:"https://www.mlb.com/yankees/ballpark/concessions"})],
  s:[A("Yankees vs Red Sox — Yankee Stadium",40.8296,-73.9262,{time:"19:00",ticket:true,ic:"ball",w:"https://it.wikipedia.org/wiki/Yankee_Stadium"})]},
 
-{id:"2026-08-29",dow:"Sab",date:"29 Ago",title:"Sabato 29",area:"Chelsea / Hudson Yards → Greenwich Village",golden:"18:27",sunset:"19:27",walk:true,
+{id:"2026-08-29",dow:"Sab",date:"29 Ago",title:"Sabato 29",area:"Chelsea / Hudson Yards → Greenwich Village",golden:"18:27",sunset:"19:27",walk:true,wm:["sun","22°C*"],wp:["sun","26°C*"],ws:["cloudsun","22°C*"],
  m:[A("Edge Observatory",40.7538,-74.0011,{time:"09:00",book:true,gc:true,q:"Edge Hudson Yards",ic:"tower",w:"https://www.edgenyc.com"}),
     A("Vessel (foto esterna)",40.7540,-74.0022,{q:"Vessel Hudson Yards",ic:"tower",w:"https://en.wikipedia.org/wiki/Vessel_(structure)"}),
     A("High Line",40.7480,-74.0048,{q:"The High Line",ic:"park",w:"https://it.wikipedia.org/wiki/High_Line"}),
@@ -429,7 +445,7 @@ const DAYS=[
  s:[A("Washington Square Arch",40.7314,-73.9971,{ic:"arch",w:"https://it.wikipedia.org/wiki/Washington_Square_Park"}),
     A("Blue Note Jazz Club",40.7309,-74.0006,{time:"22:30",book:true,ic:"music",w:"https://www.bluenotejazz.com/nyc/"})]},
 
-{id:"2026-08-30",dow:"Dom",date:"30 Ago",title:"Domenica 30",area:"Harlem · Partenza",golden:null,sunset:null,walk:false,
+{id:"2026-08-30",dow:"Dom",date:"30 Ago",title:"Domenica 30",area:"Harlem · Partenza",golden:null,sunset:null,walk:false,wm:["sun","24°C*"],wp:["sun","28°C*"],ws:["plane","Partenza"],
  m:[A("Gospel — Abyssinian Baptist Church",40.8168,-73.9407,{time:"fila 10:00 · inizio 11:00",ic:"church",w:"https://abyssinian.org"}),
     A("Apollo Theater (foto esterna)",40.8100,-73.9498,{ic:"music",w:"https://www.apollotheater.org"})],
  l:[A("Soul food brunch — Sylvia's",40.8089,-73.9442,{q:"Sylvia's Restaurant Harlem",ic:"food",w:"https://www.sylviasrestaurant.com"})],
@@ -441,6 +457,7 @@ const PERIODS=[["m","Mattina"],["l","Pranzo"],["p","Pomeriggio"],["d","Cena"],["
 const ORDER=["m","l","p","d","s"];
 const PCOL={m:"#FCCC0A",l:"#00933C",p:"#FF6319",d:"#0039A6",s:"#EE352E"};
 const PTXT={m:"#0A0A0A",l:"#fff",p:"#fff",d:"#fff",s:"#fff"};
+const WXK={m:"wm",l:"wp",p:"wp",d:"ws",s:"ws"};
 const PMARK={m:"M",l:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M7 3v7M10 3v7M8.5 10v11"/><path d="M17 3c-1.5 1-2 2.8-2 5 0 1.6.7 2.5 2 2.5V21"/></svg>',p:"P",d:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3h10l-1 6a4 4 0 01-8 0L7 3z"/><path d="M12 13v6M9 21h6"/></svg>',s:"S"};
 
 /* ================= STATE ================= */
@@ -489,6 +506,7 @@ function renderStrip(){
 }
 
 /* ================= RENDER: day view ================= */
+function wx(w){ if(!w)return ""; return '<span class="wx">'+(ILL[w[0]]||"")+esc(w[1])+'</span>'; }
 function renderDay(){
   const day=DAYS.find(d=>d.id===sel); if(!day)return;
   const st=dayState(day.id), n=ny();
@@ -520,7 +538,7 @@ function renderDay(){
     const pastP=st==="past"||(st==="today"&&ORDER.indexOf(p)<ORDER.indexOf(curP));
     html+=`<div class="period ${(pastP&&!isLive)||allDone?"done-p":""}">
       <div class="p-head"><span class="pdot ${p}">${PMARK[p]}</span><span class="nm">${label}</span>
-      ${isLive?'<span class="live-tag">In corso</span>':""}</div><div class="acts">`;
+      ${wx(day[WXK[p]])}${isLive?'<span class="live-tag">In corso</span>':""}</div><div class="acts">`;
     list.forEach((a,i)=>{
       const k=key(day.id,p,i), done=!!checks[k];
       const isNext=nextK===p+i;
@@ -632,4 +650,4 @@ setInterval(()=>{tickClock();if(tab==="day")renderDay();},30000);
 })();
 </script>
 </body>
-                          </html>
+  </html>
